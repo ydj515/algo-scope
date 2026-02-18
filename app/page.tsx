@@ -12,7 +12,7 @@ export default function Home() {
           </p>
         </section>
 
-        <section className="mt-6 grid gap-4 md:grid-cols-2">
+        <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <article className="rounded-xl border border-zinc-200 bg-white p-5">
             <h2 className="text-lg font-semibold">Circular Doubly Linked List</h2>
             <p className="mt-2 text-sm text-zinc-600">
@@ -39,6 +39,21 @@ export default function Home() {
                 className="inline-flex rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
               >
                 Stack 시작
+              </Link>
+            </div>
+          </article>
+
+          <article className="rounded-xl border border-zinc-200 bg-white p-5">
+            <h2 className="text-lg font-semibold">Queue</h2>
+            <p className="mt-2 text-sm text-zinc-600">
+              Enqueue/Dequeue/Peek 연산을 Step 단위로 재생하며 front/rear 변화와 FIFO 동작을 학습합니다.
+            </p>
+            <div className="mt-4">
+              <Link
+                href="/ds/queue"
+                className="inline-flex rounded-md bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700"
+              >
+                Queue 시작
               </Link>
             </div>
           </article>

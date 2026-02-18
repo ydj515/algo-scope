@@ -2,6 +2,7 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-020 | 템플릿 구조 기반 Queue 시각화 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-020.md` |
 | TASK-019 | 템플릿 구조 기반 Stack 시각화 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-019.md` |
 | TASK-018 | Visualizer 템플릿화(공통 Shell/OperationConfig/DS 어댑터/복잡도 메타 분리) | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-018.md` |
 | TASK-017 | searchValue 노드 조회 타입 단언 제거 및 corrupted state 방어 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-017.md` |
