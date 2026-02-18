@@ -2,6 +2,11 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-026 | Grid BFS map 입력값을 form 필드(rows/cols/walls/goal)에 자동 반영 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-026.md` |
+| TASK-025 | Grid BFS map 입력 시 goal 좌표를 마지막 인덱스로 자동 설정 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-025.md` |
+| TASK-024 | Grid BFS 입력 UI를 map/수동 영역으로 분리하고 map 우선 동작 명확화 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-024.md` |
+| TASK-023 | Grid BFS map(0/1 문자열) 입력 자동 크기/벽 추론 지원 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-023.md` |
+| TASK-022 | Problem Trace 기반 Grid BFS 시각화(폼/텍스트 입력 + TraceShell) 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-022.md` |
 | TASK-021 | 템플릿 구조 기반 Tree 시각화 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-021.md` |
 | TASK-020 | 템플릿 구조 기반 Queue 시각화 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-020.md` |
 | TASK-019 | 템플릿 구조 기반 Stack 시각화 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-019.md` |

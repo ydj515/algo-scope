@@ -16,6 +16,8 @@
   },
   "include": [
     "features/visualizer/types.ts",
+    "features/trace/types.ts",
+    "features/trace/adapter.ts",
     "lib/complexity/cdll.ts",
     "lib/complexity/queue.ts",
     "lib/complexity/stack.ts",
@@ -27,6 +29,8 @@
     "features/ds/stack/operations.ts",
     "features/ds/stack/operations.test.ts",
     "features/ds/tree/operations.ts",
-    "features/ds/tree/operations.test.ts"
+    "features/ds/tree/operations.test.ts",
+    "features/problem/grid-bfs/adapter.ts",
+    "features/problem/grid-bfs/adapter.test.ts"
   ]
 }

@@ -12,7 +12,7 @@ export default function Home() {
           </p>
         </section>
 
-        <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           <article className="rounded-xl border border-zinc-200 bg-white p-5">
             <h2 className="text-lg font-semibold">Circular Doubly Linked List</h2>
             <p className="mt-2 text-sm text-zinc-600">
@@ -69,6 +69,21 @@ export default function Home() {
                 className="inline-flex rounded-md bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700"
               >
                 Tree 시작
+              </Link>
+            </div>
+          </article>
+
+          <article className="rounded-xl border border-zinc-200 bg-white p-5">
+            <h2 className="text-lg font-semibold">Problem Trace: Grid BFS</h2>
+            <p className="mt-2 text-sm text-zinc-600">
+              폼/텍스트 입력으로 grid 문제를 설정하고 BFS 탐색, 가지치기, 경로 복원을 step 단위로 검증합니다.
+            </p>
+            <div className="mt-4">
+              <Link
+                href="/problems/grid-bfs"
+                className="inline-flex rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+              >
+                Grid BFS 시작
               </Link>
             </div>
           </article>
