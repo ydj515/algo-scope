@@ -12,7 +12,7 @@ export default function Home() {
           </p>
         </section>
 
-        <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <article className="rounded-xl border border-zinc-200 bg-white p-5">
             <h2 className="text-lg font-semibold">Circular Doubly Linked List</h2>
             <p className="mt-2 text-sm text-zinc-600">
@@ -54,6 +54,21 @@ export default function Home() {
                 className="inline-flex rounded-md bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700"
               >
                 Queue 시작
+              </Link>
+            </div>
+          </article>
+
+          <article className="rounded-xl border border-zinc-200 bg-white p-5">
+            <h2 className="text-lg font-semibold">Tree (BST)</h2>
+            <p className="mt-2 text-sm text-zinc-600">
+              Insert/Search 연산을 Step 단위로 재생하며 노드 비교와 분기 경로를 학습합니다.
+            </p>
+            <div className="mt-4">
+              <Link
+                href="/ds/tree"
+                className="inline-flex rounded-md bg-rose-600 px-4 py-2 text-sm font-semibold text-white hover:bg-rose-700"
+              >
+                Tree 시작
               </Link>
             </div>
           </article>

@@ -2,6 +2,7 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-021 | 템플릿 구조 기반 Tree 시각화 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-021.md` |
 | TASK-020 | 템플릿 구조 기반 Queue 시각화 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-020.md` |
 | TASK-019 | 템플릿 구조 기반 Stack 시각화 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-019.md` |
 | TASK-018 | Visualizer 템플릿화(공통 Shell/OperationConfig/DS 어댑터/복잡도 메타 분리) | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-018.md` |

@@ -19,11 +19,14 @@
     "lib/complexity/cdll.ts",
     "lib/complexity/queue.ts",
     "lib/complexity/stack.ts",
+    "lib/complexity/tree.ts",
     "features/ds/cdll/operations.ts",
     "features/ds/cdll/operations.test.ts",
     "features/ds/queue/operations.ts",
     "features/ds/queue/operations.test.ts",
     "features/ds/stack/operations.ts",
-    "features/ds/stack/operations.test.ts"
+    "features/ds/stack/operations.test.ts",
+    "features/ds/tree/operations.ts",
+    "features/ds/tree/operations.test.ts"
   ]
 }
