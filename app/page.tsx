@@ -23,7 +23,22 @@ export default function Home() {
                 href="/ds/circular-doubly-linked-list"
                 className="inline-flex rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
               >
-                시각화 시작
+                CDLL 시작
+              </Link>
+            </div>
+          </article>
+
+          <article className="rounded-xl border border-zinc-200 bg-white p-5">
+            <h2 className="text-lg font-semibold">Stack</h2>
+            <p className="mt-2 text-sm text-zinc-600">
+              Push/Pop/Peek 연산을 Step 단위로 재생하며 top/bottom 변화와 복잡도를 학습합니다.
+            </p>
+            <div className="mt-4">
+              <Link
+                href="/ds/stack"
+                className="inline-flex rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
+              >
+                Stack 시작
               </Link>
             </div>
           </article>

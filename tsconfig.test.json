@@ -16,7 +16,11 @@
   },
   "include": [
     "features/visualizer/types.ts",
+    "lib/complexity/cdll.ts",
+    "lib/complexity/stack.ts",
     "features/ds/cdll/operations.ts",
-    "features/ds/cdll/operations.test.ts"
+    "features/ds/cdll/operations.test.ts",
+    "features/ds/stack/operations.ts",
+    "features/ds/stack/operations.test.ts"
   ]
 }
