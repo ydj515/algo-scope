@@ -12,6 +12,9 @@ export type GridDfsInput = {
   goalCol: string;
   walls: string;
   map: string;
+  mapMode: string;
+  blockedValues: string;
+  showCellValues: string;
 };
 
 export type GridDfsSnapshot = {
@@ -20,6 +23,8 @@ export type GridDfsSnapshot = {
   start: Coord;
   goal: Coord;
   walls: Coord[];
+  matrixValues?: number[][];
+  showCellValues: boolean;
   visited: Coord[];
   frontier: Coord[];
   current: Coord | null;
@@ -35,6 +40,8 @@ type ParsedInput = {
   start: Coord;
   goal: Coord;
   walls: Coord[];
+  matrixValues?: number[][];
+  showCellValues: boolean;
 };
 
 type MutableState = {
@@ -43,6 +50,8 @@ type MutableState = {
   start: Coord;
   goal: Coord;
   walls: Coord[];
+  matrixValues?: number[][];
+  showCellValues: boolean;
   wallSet: Set<string>;
   visitedSet: Set<string>;
   frontier: Coord[];
@@ -114,6 +123,43 @@ function stringifyWalls(walls: Coord[]): string {
   return walls.map((wall) => `${wall.row},${wall.col}`).join(";");
 }
 
+function parseBlockedValueMatchers(blockedValuesText: string): Array<(value: number) => boolean> {
+  const tokens = blockedValuesText
+    .split(",")
+    .map((token) => token.trim())
+    .filter((token) => token.length > 0);
+
+  if (tokens.length === 0) {
+    return [];
+  }
+
+  return tokens.map((token) => {
+    const match = token.match(/^(<=|>=|<|>|==|!=)?\s*(-?\d+(?:\.\d+)?)$/);
+    if (!match) {
+      throw new Error("blockedValues는 숫자 또는 비교식이어야 합니다. 예: 0,-1,<=2,>5");
+    }
+
+    const operator = match[1] ?? "==";
+    const threshold = Number(match[2]);
+
+    switch (operator) {
+      case "<":
+        return (value: number) => value < threshold;
+      case "<=":
+        return (value: number) => value <= threshold;
+      case ">":
+        return (value: number) => value > threshold;
+      case ">=":
+        return (value: number) => value >= threshold;
+      case "!=":
+        return (value: number) => value !== threshold;
+      case "==":
+      default:
+        return (value: number) => value === threshold;
+    }
+  });
+}
+
 function parseBinaryGridMap(mapText: string): { rows: number; cols: number; walls: Coord[] } {
   const lines = mapText
     .trim()
@@ -156,9 +202,78 @@ function parseBinaryGridMap(mapText: string): { rows: number; cols: number; wall
   };
 }
 
+function parseMatrixGridMap(
+  mapText: string,
+  blockedValuesText: string,
+): { rows: number; cols: number; walls: Coord[]; matrixValues: number[][] } {
+  const lines = mapText
+    .trim()
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+
+  if (lines.length === 0) {
+    throw new Error("map이 비어 있습니다.");
+  }
+
+  const rowsData = lines.map((line) =>
+    line
+      .split(/\s+/)
+      .map((token) => {
+        const value = Number(token);
+        if (!Number.isFinite(value)) {
+          throw new Error("matrix 모드에서는 공백 구분 숫자만 입력 가능합니다.");
+        }
+        return value;
+      }),
+  );
+
+  const cols = rowsData[0].length;
+  if (cols === 0) {
+    throw new Error("matrix map의 각 줄은 최소 1개 숫자가 필요합니다.");
+  }
+
+  rowsData.forEach((row) => {
+    if (row.length !== cols) {
+      throw new Error("matrix map의 모든 줄 길이는 같아야 합니다.");
+    }
+  });
+
+  const matchers = parseBlockedValueMatchers(blockedValuesText);
+  const walls: Coord[] = [];
+
+  for (let row = 0; row < rowsData.length; row += 1) {
+    for (let col = 0; col < cols; col += 1) {
+      if (matchers.some((matcher) => matcher(rowsData[row][col]))) {
+        walls.push({ row, col });
+      }
+    }
+  }
+
+  return {
+    rows: rowsData.length,
+    cols,
+    walls,
+    matrixValues: rowsData,
+  };
+}
+
+function parseMapByMode(
+  mapText: string,
+  mapMode: string,
+  blockedValuesText: string,
+): { rows: number; cols: number; walls: Coord[]; matrixValues?: number[][] } {
+  if (mapMode === "matrix") {
+    return parseMatrixGridMap(mapText, blockedValuesText);
+  }
+  return parseBinaryGridMap(mapText);
+}
+
 function parseGridDfsInput(input: GridDfsInput): ParsedInput {
   const hasMap = input.map.trim().length > 0;
-  const inferred = hasMap ? parseBinaryGridMap(input.map) : null;
+  const inferred = hasMap
+    ? parseMapByMode(input.map, input.mapMode, input.blockedValues)
+    : null;
 
   const rows = inferred ? inferred.rows : parsePositiveInt("rows", input.rows);
   const cols = inferred ? inferred.cols : parsePositiveInt("cols", input.cols);
@@ -174,6 +289,7 @@ function parseGridDfsInput(input: GridDfsInput): ParsedInput {
       };
 
   const walls = inferred ? inferred.walls : parseWallsText(input.walls);
+  const showCellValues = input.showCellValues === "true";
   const uniqueWallKeys = new Set<string>();
   const dedupedWalls: Coord[] = [];
 
@@ -183,8 +299,10 @@ function parseGridDfsInput(input: GridDfsInput): ParsedInput {
     }
 
     const wallKey = keyOf(wall);
+
+    // map 기반 자동 추론에서는 start/goal이 조건식에 걸려도 탐색 가능해야 하므로 제외한다.
     if (wallKey === keyOf(start) || wallKey === keyOf(goal)) {
-      throw new Error("start/goal 좌표를 벽으로 지정할 수 없습니다.");
+      continue;
     }
 
     if (!uniqueWallKeys.has(wallKey)) {
@@ -193,7 +311,15 @@ function parseGridDfsInput(input: GridDfsInput): ParsedInput {
     }
   }
 
-  return { rows, cols, start, goal, walls: dedupedWalls };
+  return {
+    rows,
+    cols,
+    start,
+    goal,
+    walls: dedupedWalls,
+    matrixValues: inferred?.matrixValues,
+    showCellValues,
+  };
 }
 
 function serializeInput(input: GridDfsInput): string {
@@ -206,6 +332,8 @@ function serializeInput(input: GridDfsInput): string {
       cols: parsed.cols,
       start: [parsed.start.row, parsed.start.col],
       goal: [parsed.goal.row, parsed.goal.col],
+      mapMode: input.mapMode,
+      blockedValues: input.mapMode === "matrix" ? input.blockedValues : undefined,
       map: map === "" ? undefined : map,
       walls: parsed.walls.map((wall) => [wall.row, wall.col]),
     },
@@ -221,6 +349,9 @@ function parseInputText(text: string): GridDfsInput {
     start?: [number, number];
     goal?: [number, number];
     map?: string | string[];
+    mapMode?: string;
+    blockedValues?: string | number[];
+    showCellValues?: string | boolean;
     walls?: Array<[number, number]>;
   };
 
@@ -251,6 +382,10 @@ function parseInputText(text: string): GridDfsInput {
     : "";
 
   const goal = Array.isArray(parsed.goal) ? parsed.goal : [0, 0];
+  const blockedValues = Array.isArray(parsed.blockedValues)
+    ? parsed.blockedValues.join(",")
+    : String(parsed.blockedValues ?? "");
+  const showCellValues = String(parsed.showCellValues ?? "false");
 
   return {
     rows: String(parsed.rows ?? ""),
@@ -261,6 +396,9 @@ function parseInputText(text: string): GridDfsInput {
     goalCol: String(goal[1]),
     walls,
     map,
+    mapMode: parsed.mapMode === "matrix" ? "matrix" : "binary",
+    blockedValues,
+    showCellValues: showCellValues === "true" ? "true" : "false",
   };
 }
 
@@ -271,6 +409,8 @@ function snapshotFrom(state: MutableState): GridDfsSnapshot {
     start: state.start,
     goal: state.goal,
     walls: [...state.walls],
+    matrixValues: state.matrixValues ? state.matrixValues.map((row) => [...row]) : undefined,
+    showCellValues: state.showCellValues,
     visited: Array.from(state.visitedSet).map(parseCoordKey),
     frontier: [...state.frontier],
     current: state.current,
@@ -327,6 +467,8 @@ function runDfs(parsed: ParsedInput): TraceResult<GridDfsSnapshot> {
     start: parsed.start,
     goal: parsed.goal,
     walls: parsed.walls,
+    matrixValues: parsed.matrixValues,
+    showCellValues: parsed.showCellValues,
     wallSet: new Set(parsed.walls.map(keyOf)),
     visitedSet: new Set([startKey]),
     frontier: [parsed.start],
@@ -487,11 +629,45 @@ export const gridDfsAdapter: ProblemTraceAdapter<GridDfsInput, GridDfsSnapshot> 
     "문제를 그래프(grid)로 보고 DFS 탐색/가지치기/경로 복원을 step 단위로 시각화합니다.",
   inputFields: [
     {
+      key: "mapMode",
+      label: "mapMode",
+      type: "select",
+      options: [
+        { label: "binary (101011)", value: "binary" },
+        { label: "matrix (공백 숫자)", value: "matrix" },
+      ],
+      helperText: "입력 map의 형식을 선택합니다.",
+      group: "Map 입력(권장)",
+    },
+    {
+      key: "blockedValues",
+      label: "blockedValues (matrix 전용)",
+      type: "text",
+      placeholder: "예: 0,-1",
+      helperText: "숫자 목록/조건식(예: 0,-1,<=2,>5)",
+      group: "Map 입력(권장)",
+      visible: (input) => input.mapMode === "matrix",
+    },
+    {
+      key: "showCellValues",
+      label: "showCellValues",
+      type: "select",
+      options: [
+        { label: "표시 안함", value: "false" },
+        { label: "숫자 표시", value: "true" },
+      ],
+      helperText: "matrix 모드에서 셀 숫자 오버레이 표시 여부",
+      group: "Map 입력(권장)",
+      visible: (input) => input.mapMode === "matrix",
+    },
+    {
       key: "map",
-      label: "map (1=이동가능, 0=벽)",
+      label: "map",
       type: "textarea",
-      placeholder: "예:\n101111\n101010\n101011\n111011",
-      helperText: "map을 입력하면 rows/cols/walls는 자동 추론됩니다.",
+      placeholder:
+        "binary 예:\n101111\n101010\n\nmatrix 예:\n6 8 2 6 2\n3 2 3 4 6",
+      helperText:
+        "map을 입력하면 rows/cols/walls는 자동 추론됩니다. matrix 모드는 blockedValues를 사용합니다.",
       group: "Map 입력(권장)",
     },
     {
@@ -499,6 +675,7 @@ export const gridDfsAdapter: ProblemTraceAdapter<GridDfsInput, GridDfsSnapshot> 
       label: "startRow",
       type: "number",
       required: true,
+      helperText: "시작 행 인덱스(0-based)",
       group: "시작/목표 좌표",
     },
     {
@@ -506,6 +683,7 @@ export const gridDfsAdapter: ProblemTraceAdapter<GridDfsInput, GridDfsSnapshot> 
       label: "startCol",
       type: "number",
       required: true,
+      helperText: "시작 열 인덱스(0-based)",
       group: "시작/목표 좌표",
     },
     {
@@ -513,6 +691,7 @@ export const gridDfsAdapter: ProblemTraceAdapter<GridDfsInput, GridDfsSnapshot> 
       label: "goalRow",
       type: "number",
       required: true,
+      helperText: "목표 행 인덱스(0-based, map 사용 시 자동 세팅)",
       group: "시작/목표 좌표",
     },
     {
@@ -520,6 +699,7 @@ export const gridDfsAdapter: ProblemTraceAdapter<GridDfsInput, GridDfsSnapshot> 
       label: "goalCol",
       type: "number",
       required: true,
+      helperText: "목표 열 인덱스(0-based, map 사용 시 자동 세팅)",
       group: "시작/목표 좌표",
     },
     {
@@ -527,6 +707,7 @@ export const gridDfsAdapter: ProblemTraceAdapter<GridDfsInput, GridDfsSnapshot> 
       label: "행(rows)",
       type: "number",
       required: true,
+      helperText: "grid 행 개수(map 사용 시 자동 세팅)",
       group: "수동 설정(map 미사용 시)",
     },
     {
@@ -534,6 +715,7 @@ export const gridDfsAdapter: ProblemTraceAdapter<GridDfsInput, GridDfsSnapshot> 
       label: "열(cols)",
       type: "number",
       required: true,
+      helperText: "grid 열 개수(map 사용 시 자동 세팅)",
       group: "수동 설정(map 미사용 시)",
     },
     {
@@ -541,6 +723,7 @@ export const gridDfsAdapter: ProblemTraceAdapter<GridDfsInput, GridDfsSnapshot> 
       label: "walls (r,c;r,c)",
       type: "textarea",
       placeholder: "예: 1,1;1,2;2,2",
+      helperText: "수동 벽 좌표 목록(map 사용 시 자동 세팅)",
       group: "수동 설정(map 미사용 시)",
     },
   ],
@@ -553,6 +736,9 @@ export const gridDfsAdapter: ProblemTraceAdapter<GridDfsInput, GridDfsSnapshot> 
     goalCol: "7",
     walls: "1,1;1,2;2,2;3,2;4,4;4,5",
     map: "",
+    mapMode: "binary",
+    blockedValues: "0",
+    showCellValues: "false",
   }),
   normalizeFormInput: (input) => {
     const trimmedMap = input.map.trim();
@@ -561,7 +747,7 @@ export const gridDfsAdapter: ProblemTraceAdapter<GridDfsInput, GridDfsSnapshot> 
     }
 
     try {
-      const inferred = parseBinaryGridMap(trimmedMap);
+      const inferred = parseMapByMode(trimmedMap, input.mapMode, input.blockedValues);
       return {
         ...input,
         rows: String(inferred.rows),
@@ -584,6 +770,9 @@ export const gridDfsAdapter: ProblemTraceAdapter<GridDfsInput, GridDfsSnapshot> 
           cols: Number(input.cols) || 0,
           start: [Number(input.startRow) || 0, Number(input.startCol) || 0],
           goal: [Number(input.goalRow) || 0, Number(input.goalCol) || 0],
+          mapMode: input.mapMode,
+          blockedValues: input.blockedValues || undefined,
+          showCellValues: input.showCellValues,
           map: input.map.trim() || undefined,
           walls: input.walls
             .split(";")
@@ -619,6 +808,7 @@ export const gridDfsAdapter: ProblemTraceAdapter<GridDfsInput, GridDfsSnapshot> 
         start: { row: 0, col: 0 },
         goal: { row: 0, col: 0 },
         walls: [],
+        showCellValues: false,
         visited: [],
         frontier: [],
         current: null,

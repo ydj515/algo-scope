@@ -203,6 +203,24 @@ export function TraceShell<TInput extends Record<string, string>, TSnapshot>({
                       }}
                       className="rounded-md border border-zinc-300 px-3 py-2"
                     />
+                        ) : field.type === "select" ? (
+                          <select
+                            value={formInput[field.key] ?? ""}
+                            onChange={(event) => {
+                              const next = {
+                                ...formInput,
+                                [field.key]: event.target.value,
+                              };
+                              updateFormInput(next);
+                            }}
+                            className="rounded-md border border-zinc-300 px-3 py-2"
+                          >
+                            {(field.options ?? []).map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                          </select>
                         ) : (
                           <input
                             type={field.type === "number" ? "number" : "text"}

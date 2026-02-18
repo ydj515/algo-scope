@@ -12,6 +12,9 @@ function makeInput(overrides: Partial<GridDfsInput> = {}): GridDfsInput {
     goalCol: "3",
     walls: "1,1;1,2",
     map: "",
+    mapMode: "binary",
+    blockedValues: "0",
+    showCellValues: "false",
     ...overrides,
   };
 }
@@ -104,5 +107,65 @@ test("run infers rows/cols/walls from map text", () => {
   assert.equal(result.finalSnapshot.goal.row, 3);
   assert.equal(result.finalSnapshot.goal.col, 5);
   assert.ok(result.finalSnapshot.walls.length > 0);
+  assert.equal(result.steps[result.steps.length - 1].phase, "exit");
+});
+
+test("run supports matrix mode map", () => {
+  const result = gridDfsAdapter.run(
+    makeInput({
+      mapMode: "matrix",
+      blockedValues: "0",
+      map: "6 8 2 6 2\n3 2 3 4 6\n6 7 3 3 2\n7 2 5 3 6\n8 9 5 2 7",
+      rows: "",
+      cols: "",
+      walls: "",
+    }),
+  );
+
+  assert.equal(result.finalSnapshot.rows, 5);
+  assert.equal(result.finalSnapshot.cols, 5);
+  assert.equal(result.finalSnapshot.goal.row, 4);
+  assert.equal(result.finalSnapshot.goal.col, 4);
+  assert.equal(result.finalSnapshot.walls.length, 0);
+  assert.equal(result.steps[result.steps.length - 1].phase, "exit");
+});
+
+test("run supports blockedValues expression and matrix number overlay", () => {
+  const result = gridDfsAdapter.run(
+    makeInput({
+      mapMode: "matrix",
+      blockedValues: "==5",
+      showCellValues: "true",
+      map: "1 2 3\n4 5 6\n7 8 9",
+      rows: "",
+      cols: "",
+      walls: "",
+    }),
+  );
+
+  assert.equal(result.finalSnapshot.showCellValues, true);
+  assert.ok(result.finalSnapshot.matrixValues);
+  assert.equal(result.finalSnapshot.matrixValues?.[0][0], 1);
+  assert.equal(result.finalSnapshot.walls.length, 1);
+});
+
+test("matrix >5 rule keeps start/goal traversable", () => {
+  const result = gridDfsAdapter.run(
+    makeInput({
+      mapMode: "matrix",
+      blockedValues: ">5",
+      showCellValues: "true",
+      map: "6 8 2 6 2\n3 2 3 4 6\n6 7 3 3 2\n7 2 5 3 6\n8 9 5 2 7",
+      rows: "",
+      cols: "",
+      walls: "",
+    }),
+  );
+
+  assert.equal(result.finalSnapshot.rows, 5);
+  assert.equal(result.finalSnapshot.cols, 5);
+  assert.equal(result.finalSnapshot.goal.row, 4);
+  assert.equal(result.finalSnapshot.goal.col, 4);
+  assert.equal(result.finalSnapshot.showCellValues, true);
   assert.equal(result.steps[result.steps.length - 1].phase, "exit");
 });

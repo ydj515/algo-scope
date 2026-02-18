@@ -49,6 +49,7 @@ export function GridBfsCanvas({ snapshot }: Props) {
               const inPath = pathSet.has(key);
               const inFrontier = frontierSet.has(key);
               const isVisited = visitedSet.has(key);
+              const cellValue = snapshot.matrixValues?.[row]?.[col];
 
               let fill = "#ffffff";
               if (isWall) fill = "#0f172a";
@@ -62,12 +63,22 @@ export function GridBfsCanvas({ snapshot }: Props) {
               return (
                 <g key={`cell-${key}`}>
                   <rect x={x} y={y} width={CELL_SIZE} height={CELL_SIZE} fill={fill} stroke="#94a3b8" strokeWidth={1} />
-                  {(isStart || isGoal) && (
+                  {snapshot.showCellValues && typeof cellValue === "number" && (
                     <text
                       x={x + CELL_SIZE / 2}
                       y={y + CELL_SIZE / 2 + 4}
                       textAnchor="middle"
-                      className="fill-zinc-900 text-[11px] font-bold"
+                      className={`text-[10px] ${isWall ? "fill-white" : "fill-zinc-700"}`}
+                    >
+                      {cellValue}
+                    </text>
+                  )}
+                  {(isStart || isGoal) && (
+                    <text
+                      x={x + CELL_SIZE / 2}
+                      y={y + 12}
+                      textAnchor="middle"
+                      className="fill-zinc-900 text-[10px] font-bold"
                     >
                       {isStart ? "S" : "G"}
                     </text>
