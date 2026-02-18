@@ -1,7 +1,7 @@
 {
   "manifest_version": 1,
   "name": "Algo Scope",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Interactive data structure & algorithm visualizer for step-by-step learning with time/space complexity insights.",
   "action": {
     "default_popup": "index.html",
