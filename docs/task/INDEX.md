@@ -2,6 +2,8 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-032 | Knapsack 1D 최적화 모드 추가 + dp-recurrence 경계조건 입력 확장 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-032.md` |
+| TASK-031 | DP 공통 테이블/옵션(복원, 상세·요약) + 점화식/Knapsack/Grid Min Path Sum 어댑터 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-031.md` |
 | TASK-030 | matrix blockedValues 조건식 적용 시 start/goal 자동 예외 처리 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-030.md` |
 | TASK-029 | Grid BFS/DFS blockedValues 조건식 지원 + matrix 셀 값 표시 옵션 + 폼 설명 보강 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-029.md` |
 | TASK-028 | Grid BFS/DFS 입력 모드 확장(binary map + numeric matrix) | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-028.md` |

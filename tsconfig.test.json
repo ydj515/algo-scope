@@ -8,10 +8,14 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     }
   },
   "include": [
@@ -33,6 +37,13 @@
     "features/problem/grid-bfs/adapter.ts",
     "features/problem/grid-bfs/adapter.test.ts",
     "features/problem/grid-dfs/adapter.ts",
-    "features/problem/grid-dfs/adapter.test.ts"
+    "features/problem/grid-dfs/adapter.test.ts",
+    "features/problem/dp/types.ts",
+    "features/problem/dp-recurrence/adapter.ts",
+    "features/problem/dp-recurrence/adapter.test.ts",
+    "features/problem/dp-knapsack/adapter.ts",
+    "features/problem/dp-knapsack/adapter.test.ts",
+    "features/problem/dp-grid-min-path/adapter.ts",
+    "features/problem/dp-grid-min-path/adapter.test.ts"
   ]
 }

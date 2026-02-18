@@ -9,7 +9,7 @@
     "lint": "eslint",
     "test:build": "tsc -p tsconfig.test.json",
     "test:clean": "rm -rf .tmp-test",
-    "test": "npm run test:build && node --test .tmp-test/features/ds/cdll/operations.test.js .tmp-test/features/ds/stack/operations.test.js .tmp-test/features/ds/queue/operations.test.js .tmp-test/features/ds/tree/operations.test.js .tmp-test/features/problem/grid-bfs/adapter.test.js .tmp-test/features/problem/grid-dfs/adapter.test.js && npm run test:clean"
+    "test": "npm run test:build && node --test .tmp-test/features/ds/cdll/operations.test.js .tmp-test/features/ds/stack/operations.test.js .tmp-test/features/ds/queue/operations.test.js .tmp-test/features/ds/tree/operations.test.js .tmp-test/features/problem/grid-bfs/adapter.test.js .tmp-test/features/problem/grid-dfs/adapter.test.js .tmp-test/features/problem/dp-recurrence/adapter.test.js .tmp-test/features/problem/dp-knapsack/adapter.test.js .tmp-test/features/problem/dp-grid-min-path/adapter.test.js && npm run test:clean"
   },
   "dependencies": {
     "next": "16.1.6",

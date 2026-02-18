@@ -102,6 +102,52 @@ export default function Home() {
               </Link>
             </div>
           </article>
+        
+          <article className="rounded-xl border border-zinc-200 bg-white p-5">
+            <h2 className="text-lg font-semibold">Problem Trace: DP Recurrence</h2>
+            <p className="mt-2 text-sm text-zinc-600">
+              점화식을 직접 입력해 DP 테이블 계산 과정을 step 단위로 시각화합니다.
+            </p>
+            <div className="mt-4">
+              <Link
+                href="/problems/dp-recurrence"
+                className="inline-flex rounded-md bg-cyan-600 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-700"
+              >
+                DP Recurrence 시작
+              </Link>
+            </div>
+          </article>
+
+          <article className="rounded-xl border border-zinc-200 bg-white p-5">
+            <h2 className="text-lg font-semibold">Problem Trace: 0/1 Knapsack DP</h2>
+            <p className="mt-2 text-sm text-zinc-600">
+              0/1 Knapsack 점화식 테이블과 선택 복원 과정을 step 단위로 확인합니다.
+            </p>
+            <div className="mt-4">
+              <Link
+                href="/problems/dp-knapsack"
+                className="inline-flex rounded-md bg-teal-600 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+              >
+                Knapsack 시작
+              </Link>
+            </div>
+          </article>
+
+          <article className="rounded-xl border border-zinc-200 bg-white p-5">
+            <h2 className="text-lg font-semibold">Problem Trace: Grid Min Path Sum DP</h2>
+            <p className="mt-2 text-sm text-zinc-600">
+              최소 경로 합 DP 테이블과 경로 복원을 step 단위로 시각화합니다.
+            </p>
+            <div className="mt-4">
+              <Link
+                href="/problems/dp-grid-min-path"
+                className="inline-flex rounded-md bg-lime-600 px-4 py-2 text-sm font-semibold text-white hover:bg-lime-700"
+              >
+                Grid Min Path 시작
+              </Link>
+            </div>
+          </article>
+
         </section>
       </div>
     </main>
