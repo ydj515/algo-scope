@@ -76,16 +76,20 @@ export default function CircularDoublyLinkedListPage() {
       return;
     }
 
-    const result =
-      operation === "insertHead"
-        ? insertHead(listState, parsedValue)
-        : operation === "insertTail"
-          ? insertTail(listState, parsedValue)
-          : operation === "removeHead"
-            ? removeHead(listState)
-            : operation === "removeTail"
-              ? removeTail(listState)
-              : searchValue(listState, parsedValue);
+    const result = (() => {
+      switch (operation) {
+        case "insertHead":
+          return insertHead(listState, parsedValue);
+        case "insertTail":
+          return insertTail(listState, parsedValue);
+        case "removeHead":
+          return removeHead(listState);
+        case "removeTail":
+          return removeTail(listState);
+        case "searchValue":
+          return searchValue(listState, parsedValue);
+      }
+    })();
 
     setListState(result.finalState);
     loadSteps(result.steps, result.steps.length - 1);

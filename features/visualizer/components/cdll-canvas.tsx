@@ -10,6 +10,28 @@ const WIDTH = 760;
 const HEIGHT = 360;
 const CENTER_X = WIDTH / 2;
 const CENTER_Y = HEIGHT / 2;
+const EMPTY_CANVAS_HEIGHT = 360;
+const BASE_LAYOUT_RADIUS = 70;
+const MAX_LAYOUT_RADIUS = 130;
+const LAYOUT_RADIUS_STEP = 8;
+
+const NODE_RADIUS = 24;
+const NODE_LABEL_OFFSET_Y = 4;
+const HEAD_BADGE_OFFSET_Y = -32;
+const TAIL_BADGE_OFFSET_Y = 40;
+
+const EDGE_NEXT_COLOR = "#334155";
+const EDGE_PREV_COLOR = "#16a34a";
+const NODE_FILL_DEFAULT = "#e2e8f0";
+const NODE_FILL_HIGHLIGHT = "#fde68a";
+const NODE_STROKE_DEFAULT = "#475569";
+const NODE_STROKE_HIGHLIGHT = "#f59e0b";
+const NODE_STROKE_WIDTH_DEFAULT = 2;
+const NODE_STROKE_WIDTH_HIGHLIGHT = 3;
+const EDGE_NEXT_WIDTH = 1.5;
+const EDGE_PREV_WIDTH = 1.25;
+const EDGE_NEXT_OPACITY = 0.85;
+const EDGE_PREV_OPACITY = 0.7;
 
 function polarToCartesian(radius: number, angle: number) {
   return {
@@ -21,13 +43,16 @@ function polarToCartesian(radius: number, angle: number) {
 export function CdllCanvas({ snapshot }: Props) {
   if (!snapshot || snapshot.size === 0) {
     return (
-      <div className="flex h-[360px] items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50 text-sm text-zinc-500">
+      <div
+        style={{ height: EMPTY_CANVAS_HEIGHT }}
+        className="flex items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50 text-sm text-zinc-500"
+      >
         리스트가 비어 있습니다.
       </div>
     );
   }
 
-  const radius = Math.min(130, 70 + snapshot.size * 8);
+  const radius = Math.min(MAX_LAYOUT_RADIUS, BASE_LAYOUT_RADIUS + snapshot.size * LAYOUT_RADIUS_STEP);
   const positions = new Map<number, { x: number; y: number }>();
 
   snapshot.order.forEach((id, index) => {
@@ -39,13 +64,13 @@ export function CdllCanvas({ snapshot }: Props) {
 
   return (
     <div className="rounded-xl border border-zinc-200 bg-white p-3">
-      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="h-[360px] w-full">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="w-full" style={{ height: EMPTY_CANVAS_HEIGHT }}>
         <defs>
           <marker id="arrow-next" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155" />
+            <path d="M 0 0 L 10 5 L 0 10 z" fill={EDGE_NEXT_COLOR} />
           </marker>
           <marker id="arrow-prev" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="#16a34a" />
+            <path d="M 0 0 L 10 5 L 0 10 z" fill={EDGE_PREV_COLOR} />
           </marker>
         </defs>
 
@@ -61,8 +86,26 @@ export function CdllCanvas({ snapshot }: Props) {
 
           return (
             <g key={`edges-${id}`}>
-              <line x1={from.x} y1={from.y} x2={toNext.x} y2={toNext.y} stroke="#334155" strokeWidth={1.5} markerEnd="url(#arrow-next)" opacity={0.85} />
-              <line x1={from.x} y1={from.y} x2={toPrev.x} y2={toPrev.y} stroke="#16a34a" strokeWidth={1.25} markerEnd="url(#arrow-prev)" opacity={0.7} />
+              <line
+                x1={from.x}
+                y1={from.y}
+                x2={toNext.x}
+                y2={toNext.y}
+                stroke={EDGE_NEXT_COLOR}
+                strokeWidth={EDGE_NEXT_WIDTH}
+                markerEnd="url(#arrow-next)"
+                opacity={EDGE_NEXT_OPACITY}
+              />
+              <line
+                x1={from.x}
+                y1={from.y}
+                x2={toPrev.x}
+                y2={toPrev.y}
+                stroke={EDGE_PREV_COLOR}
+                strokeWidth={EDGE_PREV_WIDTH}
+                markerEnd="url(#arrow-prev)"
+                opacity={EDGE_PREV_OPACITY}
+              />
             </g>
           );
         })}
@@ -80,19 +123,26 @@ export function CdllCanvas({ snapshot }: Props) {
 
           return (
             <g key={`node-${id}`}>
-              <circle cx={pos.x} cy={pos.y} r={24} fill={isHighlighted ? "#fde68a" : "#e2e8f0"} stroke={isHighlighted ? "#f59e0b" : "#475569"} strokeWidth={isHighlighted ? 3 : 2} />
-              <text x={pos.x} y={pos.y + 4} textAnchor="middle" className="fill-zinc-900 text-xs font-semibold">
+              <circle
+                cx={pos.x}
+                cy={pos.y}
+                r={NODE_RADIUS}
+                fill={isHighlighted ? NODE_FILL_HIGHLIGHT : NODE_FILL_DEFAULT}
+                stroke={isHighlighted ? NODE_STROKE_HIGHLIGHT : NODE_STROKE_DEFAULT}
+                strokeWidth={isHighlighted ? NODE_STROKE_WIDTH_HIGHLIGHT : NODE_STROKE_WIDTH_DEFAULT}
+              />
+              <text x={pos.x} y={pos.y + NODE_LABEL_OFFSET_Y} textAnchor="middle" className="fill-zinc-900 text-xs font-semibold">
                 {node.value}
               </text>
 
               {isHead ? (
-                <text x={pos.x} y={pos.y - 32} textAnchor="middle" className="fill-blue-600 text-[11px] font-bold">
+                <text x={pos.x} y={pos.y + HEAD_BADGE_OFFSET_Y} textAnchor="middle" className="fill-blue-600 text-[11px] font-bold">
                   HEAD
                 </text>
               ) : null}
 
               {isTail ? (
-                <text x={pos.x} y={pos.y + 40} textAnchor="middle" className="fill-emerald-600 text-[11px] font-bold">
+                <text x={pos.x} y={pos.y + TAIL_BADGE_OFFSET_Y} textAnchor="middle" className="fill-emerald-600 text-[11px] font-bold">
                   TAIL
                 </text>
               ) : null}

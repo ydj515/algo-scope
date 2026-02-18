@@ -18,6 +18,7 @@ export type ListSnapshot = {
   headId: number | null;
   tailId: number | null;
   size: number;
+  nextId: number;
   highlights?: {
     nodeIds?: number[];
     edgePairs?: Array<[number, number]>;

@@ -12,12 +12,17 @@ const COMPLEXITY = {
   search: { timeWorst: "O(n)", spaceWorst: "O(1)" },
 } satisfies Record<string, ComplexityMeta>;
 
-let nodeIdCounter = 1;
-
-function nextNodeId(): number {
-  const id = nodeIdCounter;
-  nodeIdCounter += 1;
+function allocateNodeId(state: ListSnapshot): number {
+  const id = state.nextId;
+  state.nextId += 1;
   return id;
+}
+
+function getNode(state: ListSnapshot, id: number | null): VisualNode | undefined {
+  if (id === null) {
+    return undefined;
+  }
+  return state.nodes[id];
 }
 
 function cloneState(state: ListSnapshot): ListSnapshot {
@@ -30,6 +35,7 @@ function cloneState(state: ListSnapshot): ListSnapshot {
     ...state,
     nodes,
     order: [...state.order],
+    nextId: state.nextId,
     highlights: undefined,
     message: undefined,
   };
@@ -128,6 +134,7 @@ export function createEmptyListState(): ListSnapshot {
     headId: null,
     tailId: null,
     size: 0,
+    nextId: 1,
   };
 }
 
@@ -136,7 +143,7 @@ export function randomInit(count: number): OperationResult {
 
   for (let i = 0; i < count; i += 1) {
     const value = Math.floor(Math.random() * 90) + 10;
-    const newId = nextNodeId();
+    const newId = allocateNodeId(state);
 
     if (state.headId === null || state.tailId === null) {
       state.nodes[newId] = {
@@ -151,8 +158,24 @@ export function randomInit(count: number): OperationResult {
       continue;
     }
 
-    const head = state.nodes[state.headId] as VisualNode;
-    const tail = state.nodes[state.tailId] as VisualNode;
+    const head = getNode(state, state.headId);
+    const tail = getNode(state, state.tailId);
+
+    if (!head || !tail) {
+      // 비정상 상태가 감지되면 새 노드 단일 리스트로 복구
+      state.nodes = {
+        [newId]: {
+          id: newId,
+          value,
+          prevId: newId,
+          nextId: newId,
+        },
+      };
+      state.headId = newId;
+      state.tailId = newId;
+      state.size = 1;
+      continue;
+    }
 
     state.nodes[newId] = {
       id: newId,
@@ -193,7 +216,7 @@ export function randomInit(count: number): OperationResult {
 export function insertHead(state: ListSnapshot, value: number): OperationResult {
   const working = cloneState(state);
   const steps: Step[] = [];
-  const newId = nextNodeId();
+  const newId = allocateNodeId(working);
 
   steps.push(
     createStep(
@@ -244,8 +267,25 @@ export function insertHead(state: ListSnapshot, value: number): OperationResult 
     return { steps, finalState };
   }
 
-  const oldHead = working.nodes[working.headId] as VisualNode;
-  const oldTail = working.nodes[working.tailId] as VisualNode;
+  const oldHead = getNode(working, working.headId);
+  const oldTail = getNode(working, working.tailId);
+
+  if (!oldHead || !oldTail) {
+    const errorStep = createStep(
+      "insert-head-corrupted",
+      "연결 오류",
+      "head/tail 노드를 찾을 수 없어 삽입을 중단했습니다.",
+      {
+        ...working,
+        message: "corrupted state: missing head or tail node",
+      },
+      COMPLEXITY.insert,
+      true,
+    );
+
+    const finalState = normalizeState(working);
+    return { steps: [...steps, errorStep], finalState };
+  }
 
   working.nodes[newId] = {
     id: newId,
@@ -324,7 +364,28 @@ export function insertTail(state: ListSnapshot, value: number): OperationResult 
   const newTailId = working.headId;
 
   if (newTailId !== null) {
-    working.headId = working.nodes[newTailId].nextId;
+    const newTail = getNode(working, newTailId);
+    if (!newTail) {
+      const errorStep = createStep(
+        "insert-tail-corrupted",
+        "연결 오류",
+        "새 tail 노드를 찾을 수 없어 tail 이동을 중단했습니다.",
+        {
+          ...working,
+          message: "corrupted state: missing new tail node",
+        },
+        COMPLEXITY.insert,
+        true,
+      );
+
+      const finalState = normalizeState(working);
+      return {
+        steps: [...result.steps, errorStep],
+        finalState,
+      };
+    }
+
+    working.headId = newTail.nextId;
     working.tailId = newTailId;
   }
 

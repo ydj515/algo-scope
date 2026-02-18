@@ -23,11 +23,11 @@ function assertCircularInvariant(state: ListSnapshot) {
     return;
   }
 
-  assert.notEqual(state.headId, null);
-  assert.notEqual(state.tailId, null);
+  assert.ok(state.headId !== null);
+  assert.ok(state.tailId !== null);
 
   const visited = new Set<number>();
-  let cursor = state.headId as number;
+  let cursor = state.headId;
 
   for (let i = 0; i < state.size; i += 1) {
     assert.ok(!visited.has(cursor));
@@ -55,10 +55,10 @@ test("insertHead on empty list creates self-loop head/tail", () => {
   const result = insertHead(initial, 10);
 
   assert.equal(result.finalState.size, 1);
-  assert.notEqual(result.finalState.headId, null);
+  assert.ok(result.finalState.headId !== null);
   assert.equal(result.finalState.headId, result.finalState.tailId);
 
-  const onlyId = result.finalState.headId as number;
+  const onlyId = result.finalState.headId;
   const node = result.finalState.nodes[onlyId];
   assert.equal(node.nextId, onlyId);
   assert.equal(node.prevId, onlyId);
@@ -72,8 +72,10 @@ test("insertTail maintains circular invariant and tail movement", () => {
   assert.equal(result.finalState.size, 2);
   assertCircularInvariant(result.finalState);
 
-  const head = result.finalState.headId as number;
-  const tail = result.finalState.tailId as number;
+  assert.ok(result.finalState.headId !== null);
+  assert.ok(result.finalState.tailId !== null);
+  const head = result.finalState.headId;
+  const tail = result.finalState.tailId;
   assert.notEqual(head, tail);
 
   assert.equal(result.finalState.nodes[head].prevId, tail);
@@ -89,8 +91,10 @@ test("removeHead updates head/tail correctly", () => {
   assert.equal(result.finalState.size, 2);
   assertCircularInvariant(result.finalState);
 
-  const head = result.finalState.headId as number;
-  const tail = result.finalState.tailId as number;
+  assert.ok(result.finalState.headId !== null);
+  assert.ok(result.finalState.tailId !== null);
+  const head = result.finalState.headId;
+  const tail = result.finalState.tailId;
   assert.equal(result.finalState.nodes[head].prevId, tail);
   assert.equal(result.finalState.nodes[tail].nextId, head);
 });
@@ -125,4 +129,14 @@ test("searchValue not found visits at most size nodes", () => {
   assert.equal(compareSteps.length, three.size);
   assert.equal(result.steps[result.steps.length - 1].title, "Not Found");
   assertCircularInvariant(result.finalState);
+});
+
+test("separate list instances keep independent id sequences", () => {
+  const listA = insertHead(createEmptyListState(), 1).finalState;
+  const listB = insertHead(createEmptyListState(), 9).finalState;
+
+  assert.equal(listA.headId, 1);
+  assert.equal(listB.headId, 1);
+  assert.equal(listA.nextId, 2);
+  assert.equal(listB.nextId, 2);
 });
