@@ -218,20 +218,6 @@ export function insertHead(state: ListSnapshot, value: number): OperationResult 
   const steps: Step[] = [];
   const newId = allocateNodeId(working);
 
-  steps.push(
-    createStep(
-      "insert-head-1",
-      "새 노드 생성",
-      `값 ${value}를 가진 노드를 생성합니다.`,
-      {
-        ...working,
-        highlights: { nodeIds: [newId] },
-        message: "아직 연결 전",
-      },
-      COMPLEXITY.insert,
-    ),
-  );
-
   if (working.headId === null || working.tailId === null) {
     working.nodes[newId] = {
       id: newId,
@@ -242,6 +228,19 @@ export function insertHead(state: ListSnapshot, value: number): OperationResult 
     working.headId = newId;
     working.tailId = newId;
     working.size = 1;
+
+    steps.push(
+      createStep(
+        "insert-head-1",
+        "새 노드 생성",
+        `값 ${value}를 가진 노드를 생성합니다.`,
+        {
+          ...working,
+          highlights: { nodeIds: [newId], pointers: ["head", "tail"] },
+        },
+        COMPLEXITY.insert,
+      ),
+    );
 
     steps.push(
       createStep(
@@ -294,18 +293,40 @@ export function insertHead(state: ListSnapshot, value: number): OperationResult 
     nextId: oldHead.id,
   };
 
+  // 순방향(next) 순회 경로에 새 노드를 먼저 연결해 생성 step부터 시각화되도록 처리
+  oldTail.nextId = newId;
+
   steps.push(
     createStep(
-      "insert-head-3",
-      "새 노드 연결 준비",
-      "새 노드의 prev는 tail, next는 head를 가리킵니다.",
+      "insert-head-1",
+      "새 노드 생성",
+      `값 ${value}를 가진 노드를 생성하고 tail 다음에 연결합니다.`,
       {
         ...working,
         highlights: {
           nodeIds: [newId, oldHead.id, oldTail.id],
           edgePairs: [
+            [oldTail.id, newId],
             [newId, oldHead.id],
-            [newId, oldTail.id],
+          ],
+        },
+      },
+      COMPLEXITY.insert,
+    ),
+  );
+
+  steps.push(
+    createStep(
+      "insert-head-3",
+      "기존 head 갱신 준비",
+      "기존 head.prev를 새 노드로 변경해 양방향 연결을 완성합니다.",
+      {
+        ...working,
+        highlights: {
+          nodeIds: [newId, oldHead.id, oldTail.id],
+          edgePairs: [
+            [oldHead.id, newId],
+            [oldTail.id, newId],
           ],
         },
       },
@@ -314,26 +335,6 @@ export function insertHead(state: ListSnapshot, value: number): OperationResult 
   );
 
   oldHead.prevId = newId;
-  oldTail.nextId = newId;
-
-  steps.push(
-    createStep(
-      "insert-head-4",
-      "기존 head/tail 갱신",
-      "기존 head.prev와 tail.next를 새 노드로 변경합니다.",
-      {
-        ...working,
-        highlights: {
-          nodeIds: [newId, oldHead.id, oldTail.id],
-          edgePairs: [
-            [oldTail.id, newId],
-            [oldHead.id, newId],
-          ],
-        },
-      },
-      COMPLEXITY.insert,
-    ),
-  );
 
   working.headId = newId;
   working.size += 1;
@@ -561,7 +562,28 @@ export function searchValue(state: ListSnapshot, value: number): OperationResult
   let cursor = working.headId;
 
   for (let i = 0; i < working.size; i += 1) {
-    const node = working.nodes[cursor] as VisualNode;
+    const node = getNode(working, cursor);
+    if (!node) {
+      steps.push(
+        createStep(
+          `search-corrupted-${i + 1}`,
+          "검색 오류",
+          "순회 중 연결이 손상된 노드를 감지해 검색을 중단했습니다.",
+          {
+            ...working,
+            message: "corrupted state: missing node in search traversal",
+            highlights: {
+              pointers: ["cursor"],
+            },
+          },
+          COMPLEXITY.search,
+          true,
+        ),
+      );
+
+      const finalState = normalizeState(working);
+      return { steps, finalState };
+    }
 
     steps.push(
       createStep(

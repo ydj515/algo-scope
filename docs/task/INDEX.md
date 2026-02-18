@@ -2,6 +2,8 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-017 | searchValue 노드 조회 타입 단언 제거 및 corrupted state 방어 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-017.md` |
+| TASK-016 | insertHead 초기 step 하이라이트가 실제 노드를 가리키도록 보정 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-016.md` |
 | TASK-015 | 테스트 산출물 자동 정리 및 git ignore 반영 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-015.md` |
 | TASK-014 | CDLL SVG 매직 넘버 상수화 리팩터링 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-014.md` |
 | TASK-013 | runOperation 분기 로직 switch + IIFE로 가독성 개선 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-013.md` |
