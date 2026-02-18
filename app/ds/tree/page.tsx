@@ -5,5 +5,5 @@ import { TreeCanvas } from "@/features/visualizer/components/tree-canvas";
 import { VisualizerShell } from "@/features/visualizer/components/visualizer-shell";
 
 export default function TreePage() {
-  return <VisualizerShell adapter={treeAdapter} Renderer={TreeCanvas} homeHref="/" />;
+  return <VisualizerShell adapter={treeAdapter} Renderer={TreeCanvas} homeHref="/ds" />;
 }

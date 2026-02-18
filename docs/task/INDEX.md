@@ -2,6 +2,8 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-037 | 글로벌 네비에 Problems 서브 탭(Graph/DP/Backtracking) 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-037.md` |
+| TASK-036 | DS/Problems 허브 분리 및 랜딩/카탈로그/글로벌 네비 재구성 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-036.md` |
 | TASK-035 | Backtracking Generic 트리형 SVG 시각화 및 depth lane/phase 강조/샘플링 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-035.md` |
 | TASK-034 | Backtracking Generic candidateGenerator 추가 + N-Queens 대칭 해 제거 옵션 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-034.md` |
 | TASK-033 | Backtracking 공통 어댑터 + N-Queens 어댑터 추가(옵션: stopAfterFirst/detailMode/maxSteps) | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-033.md` |

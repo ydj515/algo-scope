@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GlobalNav } from "@/features/navigation/components/global-nav";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -13,7 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <GlobalNav />
+        {children}
+      </body>
     </html>
   );
 }

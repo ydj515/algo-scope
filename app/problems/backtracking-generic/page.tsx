@@ -5,5 +5,5 @@ import { BacktrackingCanvas } from "@/features/problem/backtracking/components/b
 import { TraceShell } from "@/features/trace/components/trace-shell";
 
 export default function BacktrackingGenericPage() {
-  return <TraceShell adapter={backtrackingGenericAdapter} Renderer={BacktrackingCanvas} homeHref="/" />;
+  return <TraceShell adapter={backtrackingGenericAdapter} Renderer={BacktrackingCanvas} homeHref="/problems" />;
 }

@@ -5,5 +5,5 @@ import { QueueCanvas } from "@/features/visualizer/components/queue-canvas";
 import { VisualizerShell } from "@/features/visualizer/components/visualizer-shell";
 
 export default function QueuePage() {
-  return <VisualizerShell adapter={queueAdapter} Renderer={QueueCanvas} homeHref="/" />;
+  return <VisualizerShell adapter={queueAdapter} Renderer={QueueCanvas} homeHref="/ds" />;
 }

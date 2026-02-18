@@ -5,5 +5,5 @@ import { GridBfsCanvas } from "@/features/problem/grid-bfs/canvas";
 import { TraceShell } from "@/features/trace/components/trace-shell";
 
 export default function GridBfsPage() {
-  return <TraceShell adapter={gridBfsAdapter} Renderer={GridBfsCanvas} homeHref="/" />;
+  return <TraceShell adapter={gridBfsAdapter} Renderer={GridBfsCanvas} homeHref="/problems" />;
 }

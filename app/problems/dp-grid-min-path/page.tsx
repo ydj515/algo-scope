@@ -5,5 +5,5 @@ import { dpGridMinPathAdapter } from "@/features/problem/dp-grid-min-path/adapte
 import { TraceShell } from "@/features/trace/components/trace-shell";
 
 export default function DpGridMinPathPage() {
-  return <TraceShell adapter={dpGridMinPathAdapter} Renderer={DpTableCanvas} homeHref="/" />;
+  return <TraceShell adapter={dpGridMinPathAdapter} Renderer={DpTableCanvas} homeHref="/problems" />;
 }
