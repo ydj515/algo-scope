@@ -2,6 +2,7 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-027 | Problem Trace 기반 Grid DFS 시각화 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-027.md` |
 | TASK-026 | Grid BFS map 입력값을 form 필드(rows/cols/walls/goal)에 자동 반영 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-026.md` |
 | TASK-025 | Grid BFS map 입력 시 goal 좌표를 마지막 인덱스로 자동 설정 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-025.md` |
 | TASK-024 | Grid BFS 입력 UI를 map/수동 영역으로 분리하고 map 우선 동작 명확화 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-024.md` |

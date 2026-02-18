@@ -31,6 +31,8 @@
     "features/ds/tree/operations.ts",
     "features/ds/tree/operations.test.ts",
     "features/problem/grid-bfs/adapter.ts",
-    "features/problem/grid-bfs/adapter.test.ts"
+    "features/problem/grid-bfs/adapter.test.ts",
+    "features/problem/grid-dfs/adapter.ts",
+    "features/problem/grid-dfs/adapter.test.ts"
   ]
 }
