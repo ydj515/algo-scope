@@ -2,6 +2,7 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-018 | Visualizer 템플릿화(공통 Shell/OperationConfig/DS 어댑터/복잡도 메타 분리) | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-018.md` |
 | TASK-017 | searchValue 노드 조회 타입 단언 제거 및 corrupted state 방어 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-017.md` |
 | TASK-016 | insertHead 초기 step 하이라이트가 실제 노드를 가리키도록 보정 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-016.md` |
 | TASK-015 | 테스트 산출물 자동 정리 및 git ignore 반영 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-015.md` |

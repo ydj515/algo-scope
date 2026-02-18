@@ -5,12 +5,7 @@ import type {
   Step,
   VisualNode,
 } from "@/features/visualizer/types";
-
-const COMPLEXITY = {
-  insert: { timeWorst: "O(1)", spaceWorst: "O(1)" },
-  remove: { timeWorst: "O(1)", spaceWorst: "O(1)" },
-  search: { timeWorst: "O(n)", spaceWorst: "O(1)" },
-} satisfies Record<string, ComplexityMeta>;
+import { CDLL_COMPLEXITY } from "../../../lib/complexity/cdll";
 
 function allocateNodeId(state: ListSnapshot): number {
   const id = state.nextId;
@@ -238,7 +233,7 @@ export function insertHead(state: ListSnapshot, value: number): OperationResult 
           ...working,
           highlights: { nodeIds: [newId], pointers: ["head", "tail"] },
         },
-        COMPLEXITY.insert,
+        CDLL_COMPLEXITY.insert,
       ),
     );
 
@@ -258,7 +253,7 @@ export function insertHead(state: ListSnapshot, value: number): OperationResult 
             ],
           },
         },
-        COMPLEXITY.insert,
+        CDLL_COMPLEXITY.insert,
       ),
     );
 
@@ -278,7 +273,7 @@ export function insertHead(state: ListSnapshot, value: number): OperationResult 
         ...working,
         message: "corrupted state: missing head or tail node",
       },
-      COMPLEXITY.insert,
+      CDLL_COMPLEXITY.insert,
       true,
     );
 
@@ -311,7 +306,7 @@ export function insertHead(state: ListSnapshot, value: number): OperationResult 
           ],
         },
       },
-      COMPLEXITY.insert,
+      CDLL_COMPLEXITY.insert,
     ),
   );
 
@@ -330,7 +325,7 @@ export function insertHead(state: ListSnapshot, value: number): OperationResult 
           ],
         },
       },
-      COMPLEXITY.insert,
+      CDLL_COMPLEXITY.insert,
     ),
   );
 
@@ -351,7 +346,7 @@ export function insertHead(state: ListSnapshot, value: number): OperationResult 
           pointers: ["head", "tail"],
         },
       },
-      COMPLEXITY.insert,
+      CDLL_COMPLEXITY.insert,
     ),
   );
 
@@ -375,7 +370,7 @@ export function insertTail(state: ListSnapshot, value: number): OperationResult 
           ...working,
           message: "corrupted state: missing new tail node",
         },
-        COMPLEXITY.insert,
+        CDLL_COMPLEXITY.insert,
         true,
       );
 
@@ -402,7 +397,7 @@ export function insertTail(state: ListSnapshot, value: number): OperationResult 
         pointers: ["head", "tail"],
       },
     },
-    COMPLEXITY.insert,
+    CDLL_COMPLEXITY.insert,
   );
 
   return {
@@ -424,7 +419,7 @@ export function removeHead(state: ListSnapshot): OperationResult {
         ...working,
         message: "empty list",
       },
-      COMPLEXITY.remove,
+      CDLL_COMPLEXITY.remove,
       true,
     );
 
@@ -448,7 +443,7 @@ export function removeHead(state: ListSnapshot): OperationResult {
           pointers: ["head"],
         },
       },
-      COMPLEXITY.remove,
+      CDLL_COMPLEXITY.remove,
     ),
   );
 
@@ -466,7 +461,7 @@ export function removeHead(state: ListSnapshot): OperationResult {
           nodeIds: working.headId === null ? [] : [working.headId],
         },
       },
-      COMPLEXITY.remove,
+      CDLL_COMPLEXITY.remove,
     ),
   );
 
@@ -487,7 +482,7 @@ export function removeTail(state: ListSnapshot): OperationResult {
         ...working,
         message: "empty list",
       },
-      COMPLEXITY.remove,
+      CDLL_COMPLEXITY.remove,
       true,
     );
 
@@ -511,7 +506,7 @@ export function removeTail(state: ListSnapshot): OperationResult {
           pointers: ["tail"],
         },
       },
-      COMPLEXITY.remove,
+      CDLL_COMPLEXITY.remove,
     ),
   );
 
@@ -529,7 +524,7 @@ export function removeTail(state: ListSnapshot): OperationResult {
           nodeIds: working.tailId === null ? [] : [working.tailId],
         },
       },
-      COMPLEXITY.remove,
+      CDLL_COMPLEXITY.remove,
     ),
   );
 
@@ -549,7 +544,7 @@ export function searchValue(state: ListSnapshot, value: number): OperationResult
       {
         ...working,
       },
-      COMPLEXITY.search,
+      CDLL_COMPLEXITY.search,
       true,
     );
 
@@ -576,7 +571,7 @@ export function searchValue(state: ListSnapshot, value: number): OperationResult
               pointers: ["cursor"],
             },
           },
-          COMPLEXITY.search,
+          CDLL_COMPLEXITY.search,
           true,
         ),
       );
@@ -597,7 +592,7 @@ export function searchValue(state: ListSnapshot, value: number): OperationResult
             pointers: ["cursor"],
           },
         },
-        COMPLEXITY.search,
+        CDLL_COMPLEXITY.search,
       ),
     );
 
@@ -614,7 +609,7 @@ export function searchValue(state: ListSnapshot, value: number): OperationResult
               pointers: ["cursor"],
             },
           },
-          COMPLEXITY.search,
+          CDLL_COMPLEXITY.search,
         ),
       );
 
@@ -633,7 +628,7 @@ export function searchValue(state: ListSnapshot, value: number): OperationResult
       {
         ...working,
       },
-      COMPLEXITY.search,
+      CDLL_COMPLEXITY.search,
     ),
   );
 
