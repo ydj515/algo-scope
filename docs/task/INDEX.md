@@ -2,6 +2,9 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-035 | Backtracking Generic 트리형 SVG 시각화 및 depth lane/phase 강조/샘플링 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-035.md` |
+| TASK-034 | Backtracking Generic candidateGenerator 추가 + N-Queens 대칭 해 제거 옵션 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-034.md` |
+| TASK-033 | Backtracking 공통 어댑터 + N-Queens 어댑터 추가(옵션: stopAfterFirst/detailMode/maxSteps) | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-033.md` |
 | TASK-032 | Knapsack 1D 최적화 모드 추가 + dp-recurrence 경계조건 입력 확장 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-032.md` |
 | TASK-031 | DP 공통 테이블/옵션(복원, 상세·요약) + 점화식/Knapsack/Grid Min Path Sum 어댑터 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-031.md` |
 | TASK-030 | matrix blockedValues 조건식 적용 시 start/goal 자동 예외 처리 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-030.md` |

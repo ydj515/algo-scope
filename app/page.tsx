@@ -148,6 +148,37 @@ export default function Home() {
             </div>
           </article>
 
+        
+          <article className="rounded-xl border border-zinc-200 bg-white p-5">
+            <h2 className="text-lg font-semibold">Problem Trace: Backtracking Generic</h2>
+            <p className="mt-2 text-sm text-zinc-600">
+              제약식/목표식을 직접 입력해 백트래킹 탐색 과정을 step 단위로 확인합니다.
+            </p>
+            <div className="mt-4">
+              <Link
+                href="/problems/backtracking-generic"
+                className="inline-flex rounded-md bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-700"
+              >
+                Backtracking Generic 시작
+              </Link>
+            </div>
+          </article>
+
+          <article className="rounded-xl border border-zinc-200 bg-white p-5">
+            <h2 className="text-lg font-semibold">Problem Trace: N-Queens</h2>
+            <p className="mt-2 text-sm text-zinc-600">
+              N-Queens 백트래킹에서 선택/가지치기/해 발견 과정을 시각화합니다.
+            </p>
+            <div className="mt-4">
+              <Link
+                href="/problems/backtracking-n-queens"
+                className="inline-flex rounded-md bg-pink-600 px-4 py-2 text-sm font-semibold text-white hover:bg-pink-700"
+              >
+                N-Queens 시작
+              </Link>
+            </div>
+          </article>
+
         </section>
       </div>
     </main>

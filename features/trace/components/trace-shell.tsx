@@ -144,6 +144,12 @@ export function TraceShell<TInput extends Record<string, string>, TSnapshot>({
     return groups;
   }, [visibleFields]);
 
+  const rendererExtras: Record<string, unknown> = {
+    currentStep,
+    currentIndex,
+    steps,
+  };
+
   return (
     <div className="min-h-screen bg-zinc-100 px-4 py-8 text-zinc-900 sm:px-8">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4">
@@ -313,7 +319,10 @@ export function TraceShell<TInput extends Record<string, string>, TSnapshot>({
           </div>
         </section>
 
-        <Renderer snapshot={currentSnapshot} />
+        <Renderer
+          snapshot={currentSnapshot}
+          {...rendererExtras}
+        />
 
         <section className="flex flex-wrap gap-2 rounded-xl border border-zinc-200 bg-white p-4">
           <button type="button" onClick={prev} className="rounded-md border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50">
