@@ -1,6 +1,7 @@
 "use client";
 
 import type { GridDfsSnapshot } from "@/features/problem/grid-dfs/adapter";
+import { Badge } from "@/features/ui/components/badge";
 
 type Props = {
   snapshot: GridDfsSnapshot | null;
@@ -90,13 +91,13 @@ export function GridDfsCanvas({ snapshot }: Props) {
         </svg>
       </div>
 
-      <div className="mt-3 grid gap-2 text-xs text-zinc-600 sm:grid-cols-3 lg:grid-cols-6">
-        <span>흰색: 미방문</span>
-        <span>회색: 방문</span>
-        <span>파랑: frontier(stack)</span>
-        <span>노랑: current</span>
-        <span>초록: 복원 경로</span>
-        <span>검정: 벽</span>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <Badge tone="neutral">미방문</Badge>
+        <Badge tone="neutral" variant="outline">방문</Badge>
+        <Badge tone="info">frontier(stack)</Badge>
+        <Badge tone="warning">current</Badge>
+        <Badge tone="success">복원 경로</Badge>
+        <Badge tone="danger">벽</Badge>
       </div>
 
       {snapshot.message ? <p className="mt-2 text-sm text-zinc-700">{snapshot.message}</p> : null}

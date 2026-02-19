@@ -1,13 +1,175 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f6f8;
-  --foreground: #18181b;
+  --color-bg: #f5f6f8;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f2f4f7;
+  --color-fg: #18181b;
+  --color-fg-muted: #4b5563;
+  --color-border: #d4dbe6;
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-contrast: #ffffff;
+  --color-focus: #3b82f6;
+  --color-info: #2563eb;
+  --color-info-hover: #1d4ed8;
+  --color-info-contrast: #ffffff;
+  --color-success: #16a34a;
+  --color-success-hover: #15803d;
+  --color-success-contrast: #ffffff;
+  --color-warning: #f59e0b;
+  --color-warning-hover: #d97706;
+  --color-warning-contrast: #111827;
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-danger-contrast: #ffffff;
+
+  --radius-sm: 0.4rem;
+  --radius-md: 0.6rem;
+  --radius-lg: 1rem;
+
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+
+  --motion-duration-fast: 180ms;
+  --motion-duration-normal: 280ms;
+  --motion-ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  --background: var(--color-bg);
+  --foreground: var(--color-fg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0b1220;
+    --color-surface: #131c2b;
+    --color-surface-muted: #1a2435;
+    --color-fg: #e5e7eb;
+    --color-fg-muted: #a3adbc;
+    --color-border: #293244;
+    --color-primary: #60a5fa;
+    --color-primary-hover: #3b82f6;
+    --color-primary-contrast: #08101f;
+    --color-focus: #93c5fd;
+    --color-info: #60a5fa;
+    --color-info-hover: #3b82f6;
+    --color-info-contrast: #08101f;
+    --color-success: #4ade80;
+    --color-success-hover: #22c55e;
+    --color-success-contrast: #06240f;
+    --color-warning: #fbbf24;
+    --color-warning-hover: #f59e0b;
+    --color-warning-contrast: #1f1300;
+    --color-danger: #f87171;
+    --color-danger-hover: #ef4444;
+    --color-danger-contrast: #2b0a0a;
+    --shadow-sm: 0 4px 14px rgba(2, 8, 23, 0.35);
+  }
+}
+
+:root[data-theme="light"] {
+  --color-bg: #f5f6f8;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f2f4f7;
+  --color-fg: #18181b;
+  --color-fg-muted: #4b5563;
+  --color-border: #d4dbe6;
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-contrast: #ffffff;
+  --color-focus: #3b82f6;
+  --color-info: #2563eb;
+  --color-info-hover: #1d4ed8;
+  --color-info-contrast: #ffffff;
+  --color-success: #16a34a;
+  --color-success-hover: #15803d;
+  --color-success-contrast: #ffffff;
+  --color-warning: #f59e0b;
+  --color-warning-hover: #d97706;
+  --color-warning-contrast: #111827;
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-danger-contrast: #ffffff;
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+:root[data-theme="dark"] {
+  --color-bg: #0b1220;
+  --color-surface: #131c2b;
+  --color-surface-muted: #1a2435;
+  --color-fg: #e5e7eb;
+  --color-fg-muted: #a3adbc;
+  --color-border: #293244;
+  --color-primary: #60a5fa;
+  --color-primary-hover: #3b82f6;
+  --color-primary-contrast: #08101f;
+  --color-focus: #93c5fd;
+  --color-info: #60a5fa;
+  --color-info-hover: #3b82f6;
+  --color-info-contrast: #08101f;
+  --color-success: #4ade80;
+  --color-success-hover: #22c55e;
+  --color-success-contrast: #06240f;
+  --color-warning: #fbbf24;
+  --color-warning-hover: #f59e0b;
+  --color-warning-contrast: #1f1300;
+  --color-danger: #f87171;
+  --color-danger-hover: #ef4444;
+  --color-danger-contrast: #2b0a0a;
+  --shadow-sm: 0 4px 14px rgba(2, 8, 23, 0.35);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+}
+
+@keyframes subtle-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes subtle-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes subtle-pulse-focus {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-focus) 45%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 8px transparent;
+  }
+}
+
+.motion-fade-in {
+  animation: subtle-fade-in var(--motion-duration-normal) var(--motion-ease-standard) both;
+}
+
+.motion-slide-up {
+  animation: subtle-slide-up var(--motion-duration-normal) var(--motion-ease-standard) both;
+}
+
+.motion-pulse-focus:focus-visible {
+  animation: subtle-pulse-focus 700ms var(--motion-ease-standard) 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-fade-in,
+  .motion-slide-up,
+  .motion-pulse-focus:focus-visible {
+    animation: none;
+  }
 }
 
 body {

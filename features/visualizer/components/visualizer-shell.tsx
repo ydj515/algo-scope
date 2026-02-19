@@ -1,10 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState, type ComponentType } from "react";
 import type { DsAdapter } from "@/features/visualizer/adapter";
 import { useStepper } from "@/features/visualizer/use-stepper";
 import type { ListSnapshot, Step } from "@/features/visualizer/types";
+import { Button } from "@/features/ui/components/button";
+import { Card } from "@/features/ui/components/card";
+import { Badge } from "@/features/ui/components/badge";
+import { InputField, SelectField } from "@/features/ui/components/field";
 
 type RendererProps<TSnapshot extends ListSnapshot> = {
   snapshot: TSnapshot | null;
@@ -108,122 +111,102 @@ export function VisualizerShell<
   };
 
   const stateSummary = adapter.getStateSummary(currentSnapshot);
+  const visibleSteps = steps.slice(Math.max(0, currentIndex - 4), currentIndex + 1);
 
   return (
-    <div className="min-h-screen bg-zinc-100 px-4 py-8 text-zinc-900 sm:px-8">
+    <div className="min-h-screen bg-[var(--color-bg)] px-4 py-8 text-[var(--color-fg)] sm:px-8 motion-fade-in">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold">{adapter.title}</h1>
-          <Link href={homeHref} className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm hover:bg-zinc-50">
+          <Button href={homeHref} variant="outline" size="sm" tone="neutral">
             홈으로
-          </Link>
+          </Button>
         </div>
 
         {adapter.description ? (
-          <p className="rounded-xl border border-zinc-200 bg-white p-4 text-sm text-zinc-600">{adapter.description}</p>
+          <Card className="p-4">
+            <p className="text-sm text-[var(--color-fg-muted)]">{adapter.description}</p>
+          </Card>
         ) : null}
 
-        <section className="grid gap-3 rounded-xl border border-zinc-200 bg-white p-4 sm:grid-cols-2 lg:grid-cols-6">
-          <select
+        <Card className="grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-6" motion="slide">
+          <SelectField
             value={operation}
             onChange={(event) => setOperation(event.target.value as TOperation)}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm"
-          >
-            {adapter.operations.map((candidate) => (
-              <option key={candidate.key} value={candidate.key}>
-                {candidate.label}
-              </option>
-            ))}
-          </select>
+            options={adapter.operations.map((candidate) => ({
+              label: candidate.label,
+              value: candidate.key,
+            }))}
+            wrapperClassName="sm:col-span-1"
+          />
 
-          <input
+          <InputField
             value={valueInput}
             onChange={(event) => setValueInput(event.target.value)}
             placeholder={requiresValue ? inputPlaceholder : "값 불필요"}
             disabled={!requiresValue}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm disabled:bg-zinc-100"
+            wrapperClassName="sm:col-span-1"
+            className="disabled:opacity-60"
           />
 
-          <button
-            type="button"
-            onClick={runOperation}
-            className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-          >
-            Execute
-          </button>
+          <Button onClick={runOperation} tone="primary">Execute</Button>
 
-          <button
-            type="button"
-            onClick={runRandomInit}
-            disabled={!adapter.randomInit}
-            className="rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-emerald-300"
-          >
+          <Button onClick={runRandomInit} disabled={!adapter.randomInit} tone="success">
             Random Init
-          </button>
+          </Button>
 
-          <button
-            type="button"
-            onClick={runResetAll}
-            className="rounded-md bg-zinc-700 px-3 py-2 text-sm font-semibold text-white hover:bg-zinc-800"
-          >
-            Reset
-          </button>
+          <Button onClick={runResetAll} tone="warning">Reset</Button>
 
-          <select
+          <SelectField
             value={speed}
             onChange={(event) => setSpeed(Number(event.target.value))}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm"
-          >
-            <option value={0.5}>0.5x</option>
-            <option value={1}>1x</option>
-            <option value={2}>2x</option>
-          </select>
-        </section>
+            options={[
+              { label: "0.5x", value: "0.5" },
+              { label: "1x", value: "1" },
+              { label: "2x", value: "2" },
+            ]}
+            wrapperClassName="sm:col-span-1"
+          />
+        </Card>
 
         <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="rounded-xl border border-zinc-200 bg-white p-4">
-            <p className="text-xs text-zinc-500">Current Step</p>
+          <Card className="p-4">
+            <p className="text-xs text-[var(--color-fg-muted)]">Current Step</p>
             <p className="mt-1 text-lg font-semibold">
               {steps.length === 0 ? "-" : `${currentIndex + 1} / ${steps.length}`}
             </p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-white p-4">
-            <p className="text-xs text-zinc-500">Time Complexity</p>
+          </Card>
+          <Card className="p-4">
+            <p className="text-xs text-[var(--color-fg-muted)]">Time Complexity</p>
             <p className="mt-1 text-lg font-semibold">{currentStep?.complexity.timeWorst ?? "-"}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-white p-4">
-            <p className="text-xs text-zinc-500">Space Complexity</p>
+          </Card>
+          <Card className="p-4">
+            <p className="text-xs text-[var(--color-fg-muted)]">Space Complexity</p>
             <p className="mt-1 text-lg font-semibold">{currentStep?.complexity.spaceWorst ?? "-"}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-white p-4">
-            <p className="text-xs text-zinc-500">State</p>
+          </Card>
+          <Card className="p-4">
+            <p className="text-xs text-[var(--color-fg-muted)]">State</p>
             <p className="mt-1 text-sm">
               {Object.entries(stateSummary)
                 .map(([key, value]) => `${key}=${String(value)}`)
                 .join(", ")}
             </p>
-          </div>
+          </Card>
         </section>
 
         <Renderer snapshot={currentSnapshot} />
 
-        <section className="flex flex-wrap gap-2 rounded-xl border border-zinc-200 bg-white p-4">
-          <button type="button" onClick={prev} className="rounded-md border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50">
-            Prev
-          </button>
-          <button type="button" onClick={next} className="rounded-md border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50">
-            Next
-          </button>
-          <button
-            type="button"
+        <Card className="flex flex-wrap gap-2 p-4">
+          <Button onClick={prev} variant="outline" tone="neutral">Prev</Button>
+          <Button onClick={next} variant="outline" tone="neutral">Next</Button>
+          <Button
             onClick={isPlaying ? pause : play}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50"
+            variant="outline"
+            tone="neutral"
           >
             {isPlaying ? "Pause" : "Play"}
-          </button>
-          <button type="button" onClick={reset} className="rounded-md border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50">
-            Reset Step
-          </button>
+          </Button>
+          <Button onClick={reset} variant="outline" tone="neutral">Reset Step</Button>
 
           <input
             type="range"
@@ -233,16 +216,46 @@ export function VisualizerShell<
             onChange={(event) => jumpTo(Number(event.target.value))}
             className="ml-auto w-48"
           />
-        </section>
+        </Card>
 
-        <section className="rounded-xl border border-zinc-200 bg-white p-4">
-          <p className="text-sm font-semibold">Step Description</p>
-          <p className={`mt-2 text-sm ${currentStep?.isError ? "text-red-600" : "text-zinc-700"}`}>
+        <Card className="p-4">
+          <div className="mb-2 flex items-center gap-2">
+            <p className="text-sm font-semibold">Step List</p>
+            <Badge tone="neutral" variant="outline">{steps.length} steps</Badge>
+          </div>
+          <div className="space-y-1">
+            {visibleSteps.map((step, idx) => (
+              <div
+                key={`step-row-${step.id}`}
+                className={`flex items-center gap-2 rounded-[var(--radius-md)] px-2 py-1 text-xs ${
+                  idx === visibleSteps.length - 1
+                    ? "bg-[var(--color-surface-muted)]"
+                    : ""
+                }`}
+              >
+                <Badge tone={step.isError ? "danger" : "info"}>{step.isError ? "ERROR" : "STEP"}</Badge>
+                <span className="truncate text-[var(--color-fg-muted)]">
+                  {step.title}
+                </span>
+              </div>
+            ))}
+            {steps.length === 0 ? <p className="text-xs text-[var(--color-fg-muted)]">아직 step이 없습니다.</p> : null}
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-semibold">Step Description</p>
+            <Badge tone={currentStep?.isError ? "danger" : "info"}>
+              {currentStep?.isError ? "ERROR" : "INFO"}
+            </Badge>
+          </div>
+          <p className={`mt-2 text-sm ${currentStep?.isError ? "text-[var(--color-danger)]" : "text-[var(--color-fg-muted)]"}`}>
             {currentStep
               ? `${currentStep.title}: ${currentStep.description}`
               : "연산을 실행하면 단계 설명이 표시됩니다."}
           </p>
-        </section>
+        </Card>
       </div>
     </div>
   );

@@ -4,6 +4,6 @@ export type CatalogItem = {
   description: string;
   href: string;
   ctaLabel: string;
-  accentClass: string;
+  tone?: "primary" | "neutral" | "success" | "warning" | "danger";
   group?: string;
 };

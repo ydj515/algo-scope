@@ -2,6 +2,11 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-042 | Badge 범위 확장(스텝 리스트/캔버스 범례) + 모바일 테마 외부 클릭 닫힘 + Field 공통화 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-042.md` |
+| TASK-041 | 공통 Badge 도입 및 Shell 메시지 표준화 + 모바일 테마 드롭다운 최적화 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-041.md` |
+| TASK-040 | 테마 드롭다운 전환 + semantic tone 확장 + VisualizerShell/TraceShell 공통 UI 전면 적용 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-040.md` |
+| TASK-039 | 디자인 토큰/공통 Button·Card/서브틀 모션 3종 및 테마 지원 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-039.md` |
+| TASK-038 | 디자인 시스템 점검(토큰/애니메이션/컴포넌트 일관성) Audit | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-038.md` |
 | TASK-037 | 글로벌 네비에 Problems 서브 탭(Graph/DP/Backtracking) 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-037.md` |
 | TASK-036 | DS/Problems 허브 분리 및 랜딩/카탈로그/글로벌 네비 재구성 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-036.md` |
 | TASK-035 | Backtracking Generic 트리형 SVG 시각화 및 depth lane/phase 강조/샘플링 추가 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-035.md` |

@@ -1,10 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useState, type ComponentType } from "react";
 import type { ProblemTraceAdapter } from "@/features/trace/adapter";
 import type { TraceStep } from "@/features/trace/types";
 import { useTraceStepper } from "@/features/trace/use-trace-stepper";
+import { Button } from "@/features/ui/components/button";
+import { Card } from "@/features/ui/components/card";
+import { Badge } from "@/features/ui/components/badge";
+import { InputField, SelectField, TextareaField } from "@/features/ui/components/field";
 
 type RendererProps<TSnapshot> = {
   snapshot: TSnapshot | null;
@@ -149,198 +152,185 @@ export function TraceShell<TInput extends Record<string, string>, TSnapshot>({
     currentIndex,
     steps,
   };
+  const visibleSteps = steps.slice(Math.max(0, currentIndex - 4), currentIndex + 1);
 
   return (
-    <div className="min-h-screen bg-zinc-100 px-4 py-8 text-zinc-900 sm:px-8">
+    <div className="min-h-screen bg-[var(--color-bg)] px-4 py-8 text-[var(--color-fg)] sm:px-8 motion-fade-in">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold">{adapter.title}</h1>
-          <Link href={homeHref} className="rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm hover:bg-zinc-50">
+          <Button href={homeHref} variant="outline" size="sm" tone="neutral">
             홈으로
-          </Link>
+          </Button>
         </div>
 
         {adapter.description ? (
-          <p className="rounded-xl border border-zinc-200 bg-white p-4 text-sm text-zinc-600">{adapter.description}</p>
+          <Card className="p-4">
+            <p className="text-sm text-[var(--color-fg-muted)]">{adapter.description}</p>
+          </Card>
         ) : null}
 
-        <section className="rounded-xl border border-zinc-200 bg-white p-4">
+        <Card className="p-4" motion="slide">
           <div className="mb-3 flex gap-2">
-            <button
-              type="button"
+            <Button
               onClick={() => setInputMode("form")}
-              className={`rounded-md px-3 py-1.5 text-sm ${
-                inputMode === "form" ? "bg-blue-600 text-white" : "border border-zinc-300 bg-white"
-              }`}
+              variant={inputMode === "form" ? "solid" : "outline"}
+              tone={inputMode === "form" ? "primary" : "neutral"}
+              size="sm"
             >
               Form
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
               onClick={() => setInputMode("text")}
-              className={`rounded-md px-3 py-1.5 text-sm ${
-                inputMode === "text" ? "bg-blue-600 text-white" : "border border-zinc-300 bg-white"
-              }`}
+              variant={inputMode === "text" ? "solid" : "outline"}
+              tone={inputMode === "text" ? "primary" : "neutral"}
+              size="sm"
             >
               Text
-            </button>
+            </Button>
           </div>
 
           {inputMode === "form" ? (
             <div className="flex flex-col gap-4">
               {groupedFields.map((group) => (
-                <section key={group.name} className="rounded-lg border border-zinc-200 p-3">
-                  <h3 className="mb-3 text-sm font-semibold text-zinc-800">{group.name}</h3>
+                <Card key={group.name} className="rounded-[var(--radius-md)] p-3">
+                  <h3 className="mb-3 text-sm font-semibold text-[var(--color-fg)]">{group.name}</h3>
                   <div className="grid gap-3 sm:grid-cols-2">
                     {group.fields.map((field) => (
-                      <label key={field.key} className="flex flex-col gap-1 text-sm">
-                        <span className="font-medium text-zinc-700">{field.label}</span>
-                        {field.type === "textarea" ? (
-                          <textarea
-                            rows={3}
-                            value={formInput[field.key] ?? ""}
-                            placeholder={field.placeholder}
-                            onChange={(event) => {
-                        const next = {
-                          ...formInput,
-                          [field.key]: event.target.value,
-                        };
-                        updateFormInput(next);
-                      }}
-                      className="rounded-md border border-zinc-300 px-3 py-2"
-                    />
-                        ) : field.type === "select" ? (
-                          <select
-                            value={formInput[field.key] ?? ""}
-                            onChange={(event) => {
-                              const next = {
-                                ...formInput,
-                                [field.key]: event.target.value,
-                              };
-                              updateFormInput(next);
-                            }}
-                            className="rounded-md border border-zinc-300 px-3 py-2"
-                          >
-                            {(field.options ?? []).map((option) => (
-                              <option key={option.value} value={option.value}>
-                                {option.label}
-                              </option>
-                            ))}
-                          </select>
-                        ) : (
-                          <input
-                            type={field.type === "number" ? "number" : "text"}
-                            value={formInput[field.key] ?? ""}
-                            placeholder={field.placeholder}
-                            onChange={(event) => {
-                              const next = {
-                                ...formInput,
-                                [field.key]: event.target.value,
-                              };
-                              updateFormInput(next);
-                            }}
-                            className="rounded-md border border-zinc-300 px-3 py-2"
-                          />
-                        )}
-                        {field.helperText ? (
-                          <span className="text-xs text-zinc-500">{field.helperText}</span>
-                        ) : null}
-                      </label>
+                      field.type === "textarea" ? (
+                        <TextareaField
+                          key={field.key}
+                          label={field.label}
+                          helperText={field.helperText}
+                          rows={3}
+                          value={formInput[field.key] ?? ""}
+                          placeholder={field.placeholder}
+                          onChange={(event) => {
+                            const next = {
+                              ...formInput,
+                              [field.key]: event.target.value,
+                            };
+                            updateFormInput(next);
+                          }}
+                        />
+                      ) : field.type === "select" ? (
+                        <SelectField
+                          key={field.key}
+                          label={field.label}
+                          helperText={field.helperText}
+                          value={formInput[field.key] ?? ""}
+                          options={(field.options ?? []).map((option) => ({
+                            label: option.label,
+                            value: option.value,
+                          }))}
+                          onChange={(event) => {
+                            const next = {
+                              ...formInput,
+                              [field.key]: event.target.value,
+                            };
+                            updateFormInput(next);
+                          }}
+                        />
+                      ) : (
+                        <InputField
+                          key={field.key}
+                          label={field.label}
+                          helperText={field.helperText}
+                          type={field.type === "number" ? "number" : "text"}
+                          value={formInput[field.key] ?? ""}
+                          placeholder={field.placeholder}
+                          onChange={(event) => {
+                            const next = {
+                              ...formInput,
+                              [field.key]: event.target.value,
+                            };
+                            updateFormInput(next);
+                          }}
+                        />
+                      )
                     ))}
                   </div>
-                </section>
+                </Card>
               ))}
             </div>
           ) : (
             <div className="flex flex-col gap-2">
-              <textarea
+              <TextareaField
                 rows={10}
                 value={textInput}
                 onChange={(event) => setTextInput(event.target.value)}
-                className="w-full rounded-md border border-zinc-300 px-3 py-2 font-mono text-sm"
+                className="w-full font-mono"
               />
-              <button
-                type="button"
-                onClick={applyTextToForm}
-                className="w-fit rounded-md border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50"
-              >
+              <Button onClick={applyTextToForm} variant="outline" tone="neutral" className="w-fit">
                 Text를 Form에 반영
-              </button>
+              </Button>
             </div>
           )}
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <button type="button" onClick={runTrace} className="rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700">
-              Execute
-            </button>
-            <button type="button" onClick={resetInput} className="rounded-md bg-zinc-700 px-3 py-2 text-sm font-semibold text-white hover:bg-zinc-800">
-              Reset
-            </button>
-            <select
+            <Button onClick={runTrace} tone="primary">Execute</Button>
+            <Button onClick={resetInput} tone="warning">Reset</Button>
+            <SelectField
               value={speed}
               onChange={(event) => setSpeed(Number(event.target.value))}
-              className="rounded-md border border-zinc-300 px-3 py-2 text-sm"
-            >
-              <option value={0.5}>0.5x</option>
-              <option value={1}>1x</option>
-              <option value={2}>2x</option>
-            </select>
+              options={[
+                { label: "0.5x", value: "0.5" },
+                { label: "1x", value: "1" },
+                { label: "2x", value: "2" },
+              ]}
+            />
           </div>
 
-          {inputError ? <p className="mt-3 text-sm text-red-600">{inputError}</p> : null}
-        </section>
+          {inputError ? (
+            <div className="mt-3 flex items-center gap-2 rounded-[var(--radius-md)] border border-[var(--color-danger)]/30 bg-[color-mix(in_srgb,var(--color-danger)_10%,var(--color-surface))] px-3 py-2">
+              <Badge tone="danger">ERROR</Badge>
+              <p className="text-sm text-[var(--color-danger)]">{inputError}</p>
+            </div>
+          ) : null}
+        </Card>
 
         <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          <div className="rounded-xl border border-zinc-200 bg-white p-4">
-            <p className="text-xs text-zinc-500">Current Step</p>
+          <Card className="p-4">
+            <p className="text-xs text-[var(--color-fg-muted)]">Current Step</p>
             <p className="mt-1 text-lg font-semibold">
               {steps.length === 0 ? "-" : `${currentIndex + 1} / ${steps.length}`}
             </p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-white p-4">
-            <p className="text-xs text-zinc-500">Phase</p>
+          </Card>
+          <Card className="p-4">
+            <p className="text-xs text-[var(--color-fg-muted)]">Phase</p>
             <p className="mt-1 text-lg font-semibold">{currentStep?.phase ?? "-"}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-white p-4">
-            <p className="text-xs text-zinc-500">Time Complexity</p>
+          </Card>
+          <Card className="p-4">
+            <p className="text-xs text-[var(--color-fg-muted)]">Time Complexity</p>
             <p className="mt-1 text-lg font-semibold">{currentStep?.complexity.timeWorst ?? "-"}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-white p-4">
-            <p className="text-xs text-zinc-500">Space Complexity</p>
+          </Card>
+          <Card className="p-4">
+            <p className="text-xs text-[var(--color-fg-muted)]">Space Complexity</p>
             <p className="mt-1 text-lg font-semibold">{currentStep?.complexity.spaceWorst ?? "-"}</p>
-          </div>
-          <div className="rounded-xl border border-zinc-200 bg-white p-4">
-            <p className="text-xs text-zinc-500">State</p>
+          </Card>
+          <Card className="p-4">
+            <p className="text-xs text-[var(--color-fg-muted)]">State</p>
             <p className="mt-1 text-sm">
               {Object.entries(summary)
                 .map(([key, value]) => `${key}=${String(value)}`)
                 .join(", ") || "-"}
             </p>
-          </div>
+          </Card>
         </section>
 
-        <Renderer
-          snapshot={currentSnapshot}
-          {...rendererExtras}
-        />
+        <Renderer snapshot={currentSnapshot} {...rendererExtras} />
 
-        <section className="flex flex-wrap gap-2 rounded-xl border border-zinc-200 bg-white p-4">
-          <button type="button" onClick={prev} className="rounded-md border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50">
-            Prev
-          </button>
-          <button type="button" onClick={next} className="rounded-md border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50">
-            Next
-          </button>
-          <button
-            type="button"
+        <Card className="flex flex-wrap gap-2 p-4">
+          <Button onClick={prev} variant="outline" tone="neutral">Prev</Button>
+          <Button onClick={next} variant="outline" tone="neutral">Next</Button>
+          <Button
             onClick={isPlaying ? pause : play}
-            className="rounded-md border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50"
+            variant="outline"
+            tone="neutral"
           >
             {isPlaying ? "Pause" : "Play"}
-          </button>
-          <button type="button" onClick={reset} className="rounded-md border border-zinc-300 px-3 py-2 text-sm hover:bg-zinc-50">
-            Reset Step
-          </button>
+          </Button>
+          <Button onClick={reset} variant="outline" tone="neutral">Reset Step</Button>
 
           <input
             type="range"
@@ -350,16 +340,76 @@ export function TraceShell<TInput extends Record<string, string>, TSnapshot>({
             onChange={(event) => jumpTo(Number(event.target.value))}
             className="ml-auto w-48"
           />
-        </section>
+        </Card>
 
-        <section className="rounded-xl border border-zinc-200 bg-white p-4">
-          <p className="text-sm font-semibold">Step Description</p>
-          <p className={`mt-2 text-sm ${currentStep?.isError ? "text-red-600" : "text-zinc-700"}`}>
+        <Card className="p-4">
+          <div className="mb-2 flex items-center gap-2">
+            <p className="text-sm font-semibold">Step List</p>
+            <Badge tone="neutral" variant="outline">{steps.length} steps</Badge>
+          </div>
+          <div className="space-y-1">
+            {visibleSteps.map((step, idx) => (
+              <div
+                key={`step-row-${step.id}`}
+                className={`flex items-center gap-2 rounded-[var(--radius-md)] px-2 py-1 text-xs ${
+                  idx === visibleSteps.length - 1 ? "bg-[var(--color-surface-muted)]" : ""
+                }`}
+              >
+                <Badge
+                  tone={
+                    step.isError
+                      ? "danger"
+                      : step.phase === "exit"
+                        ? "success"
+                        : step.phase === "prune"
+                          ? "warning"
+                          : "info"
+                  }
+                >
+                  {step.isError
+                    ? "ERROR"
+                    : step.phase === "exit"
+                      ? "SUCCESS"
+                      : step.phase === "prune"
+                        ? "WARN"
+                        : "INFO"}
+                </Badge>
+                <span className="truncate text-[var(--color-fg-muted)]">{step.title}</span>
+              </div>
+            ))}
+            {steps.length === 0 ? <p className="text-xs text-[var(--color-fg-muted)]">아직 step이 없습니다.</p> : null}
+          </div>
+        </Card>
+
+        <Card className="p-4">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-semibold">Step Description</p>
+            <Badge
+              tone={
+                currentStep?.isError
+                  ? "danger"
+                  : currentStep?.phase === "exit"
+                    ? "success"
+                    : currentStep?.phase === "prune"
+                      ? "warning"
+                      : "info"
+              }
+            >
+              {currentStep?.isError
+                ? "ERROR"
+                : currentStep?.phase === "exit"
+                  ? "SUCCESS"
+                  : currentStep?.phase === "prune"
+                    ? "WARN"
+                    : "INFO"}
+            </Badge>
+          </div>
+          <p className={`mt-2 text-sm ${currentStep?.isError ? "text-[var(--color-danger)]" : "text-[var(--color-fg-muted)]"}`}>
             {currentStep
               ? `${currentStep.title}: ${currentStep.description}`
               : "입력을 설정하고 Execute를 누르면 trace가 표시됩니다."}
           </p>
-        </section>
+        </Card>
       </div>
     </div>
   );

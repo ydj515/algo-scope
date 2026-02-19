@@ -1,6 +1,7 @@
 "use client";
 
 import type { DpSnapshot } from "@/features/problem/dp/types";
+import { Badge } from "@/features/ui/components/badge";
 
 type Props = {
   snapshot: DpSnapshot | null;
@@ -54,12 +55,12 @@ export function DpTableCanvas({ snapshot }: Props) {
           )}
         </svg>
       </div>
-      <div className="mt-3 grid gap-2 text-xs text-zinc-600 sm:grid-cols-3 lg:grid-cols-5">
-        <span>노랑: 현재 셀</span>
-        <span>파랑: 갱신 셀</span>
-        <span>초록: 복원 경로</span>
-        <span>흰색: 일반 셀</span>
-        <span>answer: {snapshot.answer}</span>
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <Badge tone="warning">현재 셀</Badge>
+        <Badge tone="info">갱신 셀</Badge>
+        <Badge tone="success">복원 경로</Badge>
+        <Badge tone="neutral">일반 셀</Badge>
+        <Badge tone="info" variant="outline">answer: {snapshot.answer}</Badge>
       </div>
       {snapshot.message ? <p className="mt-2 text-sm text-zinc-700">{snapshot.message}</p> : null}
     </section>

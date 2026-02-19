@@ -2,12 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-function tabClass(active: boolean): string {
-  return active
-    ? "rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-semibold text-white"
-    : "rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-sm font-semibold text-zinc-700 hover:bg-zinc-50";
-}
+import { ThemeToggle } from "@/features/navigation/components/theme-toggle";
+import { Button } from "@/features/ui/components/button";
 
 export function GlobalNav() {
   const pathname = usePathname();
@@ -27,20 +23,28 @@ export function GlobalNav() {
         : null;
 
   return (
-    <header className="border-b border-zinc-200 bg-white/90 backdrop-blur">
+    <header className="border-b border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-surface)_88%,transparent)] backdrop-blur motion-fade-in">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-3 sm:px-8">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-sm font-bold text-zinc-900">
+          <Link href="/" className="text-sm font-bold text-[var(--color-fg)]">
             Algo Scope
           </Link>
-          <nav className="flex items-center gap-2">
-            <Link href="/ds" className={tabClass(isDs)}>
-              Data Structures
-            </Link>
-            <Link href="/problems" className={tabClass(isProblems)}>
-              Problem Solving
-            </Link>
-          </nav>
+          <div className="flex items-center gap-2">
+            <nav className="flex items-center gap-2">
+              <Button href="/ds" variant={isDs ? "solid" : "outline"} size="sm" tone={isDs ? "primary" : "neutral"}>
+                Data Structures
+              </Button>
+              <Button
+                href="/problems"
+                variant={isProblems ? "solid" : "outline"}
+                size="sm"
+                tone={isProblems ? "primary" : "neutral"}
+              >
+                Problem Solving
+              </Button>
+            </nav>
+            <ThemeToggle />
+          </div>
         </div>
 
         {isProblems ? (
@@ -48,17 +52,9 @@ export function GlobalNav() {
             {problemSubtabs.map((tab) => {
               const isActive = activeProblemSubtab === tab.label;
               return (
-                <Link
-                  key={tab.label}
-                  href={tab.href}
-                  className={
-                    isActive
-                      ? "rounded-md bg-blue-600 px-2.5 py-1 text-xs font-semibold text-white"
-                      : "rounded-md border border-zinc-300 bg-white px-2.5 py-1 text-xs font-semibold text-zinc-700 hover:bg-zinc-50"
-                  }
-                >
+                <Button key={tab.label} href={tab.href} variant={isActive ? "solid" : "outline"} size="sm" tone={isActive ? "primary" : "neutral"}>
                   {tab.label}
-                </Link>
+                </Button>
               );
             })}
           </nav>
