@@ -1,6 +1,7 @@
 "use client";
 
 import type { ListSnapshot } from "@/features/visualizer/types";
+import { CanvasFrame } from "@/features/ui/components/canvas-frame";
 
 type Props = {
   snapshot: ListSnapshot | null;
@@ -16,16 +17,18 @@ const EMPTY_HEIGHT = 360;
 export function StackCanvas({ snapshot }: Props) {
   if (!snapshot || snapshot.size === 0) {
     return (
-      <div style={{ height: EMPTY_HEIGHT }} className="flex items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50 text-sm text-zinc-500">
-        스택이 비어 있습니다.
-      </div>
+      <CanvasFrame
+        hasData={false}
+        emptyText="스택이 비어 있습니다."
+        className="h-[360px]"
+      />
     );
   }
 
   const highlighted = new Set(snapshot.highlights?.nodeIds ?? []);
 
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-3">
+    <CanvasFrame hasData className="p-3">
       <svg viewBox="0 0 760 360" className="w-full" style={{ height: EMPTY_HEIGHT }}>
         {snapshot.order.map((id, index) => {
           const node = snapshot.nodes[id];
@@ -43,22 +46,22 @@ export function StackCanvas({ snapshot }: Props) {
                 width={BOX_WIDTH}
                 height={BOX_HEIGHT}
                 rx={8}
-                fill={isHighlighted ? "#fde68a" : "#e2e8f0"}
-                stroke={isHighlighted ? "#f59e0b" : "#475569"}
+                fill={isHighlighted ? "var(--viz-node-highlight)" : "var(--viz-node-default)"}
+                stroke={isHighlighted ? "var(--viz-node-highlight-stroke)" : "var(--viz-node-stroke)"}
                 strokeWidth={isHighlighted ? 3 : 2}
               />
-              <text x={x + BOX_WIDTH / 2} y={y + BOX_HEIGHT / 2 + 4} textAnchor="middle" className="fill-zinc-900 text-sm font-semibold">
+              <text x={x + BOX_WIDTH / 2} y={y + BOX_HEIGHT / 2 + 4} textAnchor="middle" className="fill-[var(--viz-cell-text)] text-sm font-semibold">
                 {node.value}
               </text>
 
               {isTop ? (
-                <text x={x - 24} y={y + BOX_HEIGHT / 2 + 4} textAnchor="end" className="fill-blue-600 text-[11px] font-bold">
+                <text x={x - 24} y={y + BOX_HEIGHT / 2 + 4} textAnchor="end" className="fill-[var(--viz-label-head)] text-[11px] font-bold">
                   TOP
                 </text>
               ) : null}
 
               {isBottom ? (
-                <text x={x + BOX_WIDTH + 24} y={y + BOX_HEIGHT / 2 + 4} textAnchor="start" className="fill-emerald-600 text-[11px] font-bold">
+                <text x={x + BOX_WIDTH + 24} y={y + BOX_HEIGHT / 2 + 4} textAnchor="start" className="fill-[var(--viz-label-tail)] text-[11px] font-bold">
                   BOTTOM
                 </text>
               ) : null}
@@ -66,6 +69,6 @@ export function StackCanvas({ snapshot }: Props) {
           );
         })}
       </svg>
-    </div>
+    </CanvasFrame>
   );
 }

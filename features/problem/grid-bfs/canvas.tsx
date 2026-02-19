@@ -2,6 +2,7 @@
 
 import type { GridBfsSnapshot } from "@/features/problem/grid-bfs/adapter";
 import { Badge } from "@/features/ui/components/badge";
+import { CanvasFrame } from "@/features/ui/components/canvas-frame";
 
 type Props = {
   snapshot: GridBfsSnapshot | null;
@@ -19,9 +20,11 @@ function isSame(a: { row: number; col: number } | null, b: { row: number; col: n
 export function GridBfsCanvas({ snapshot }: Props) {
   if (!snapshot) {
     return (
-      <div className="flex h-[420px] items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50 text-sm text-zinc-500">
-        입력을 설정하고 Execute를 눌러주세요.
-      </div>
+      <CanvasFrame
+        hasData={false}
+        emptyText="입력을 설정하고 Execute를 눌러주세요."
+        className="h-[420px]"
+      />
     );
   }
 
@@ -33,9 +36,30 @@ export function GridBfsCanvas({ snapshot }: Props) {
   const pathSet = new Set(snapshot.path.map((cell) => `${cell.row},${cell.col}`));
 
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white p-4">
+    <CanvasFrame
+      hasData
+      header={(
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm font-semibold text-[var(--color-fg)]">Grid BFS Canvas</p>
+          <p className="text-xs text-[var(--color-fg-muted)]">
+            rows={snapshot.rows}, cols={snapshot.cols}, frontier={snapshot.frontier.length}, visited={snapshot.visited.length}
+          </p>
+        </div>
+      )}
+      message={snapshot.message}
+      legend={(
+        <div className="flex flex-wrap gap-2">
+          <Badge tone="neutral">미방문</Badge>
+          <Badge tone="neutral" variant="outline">방문</Badge>
+          <Badge tone="info">frontier</Badge>
+          <Badge tone="warning">current</Badge>
+          <Badge tone="success">최종 경로</Badge>
+          <Badge tone="danger">벽</Badge>
+        </div>
+      )}
+    >
       <div className="overflow-auto">
-        <svg width={Math.max(width, 320)} height={Math.max(height, 120)} className="rounded-lg bg-white">
+        <svg width={Math.max(width, 320)} height={Math.max(height, 120)} className="rounded-lg bg-[var(--color-surface)]">
           {Array.from({ length: snapshot.rows }).map((_, row) =>
             Array.from({ length: snapshot.cols }).map((__, col) => {
               const key = `${row},${col}`;
@@ -52,24 +76,25 @@ export function GridBfsCanvas({ snapshot }: Props) {
               const isVisited = visitedSet.has(key);
               const cellValue = snapshot.matrixValues?.[row]?.[col];
 
-              let fill = "#ffffff";
-              if (isWall) fill = "#0f172a";
-              else if (inPath) fill = "#86efac";
-              else if (isCurrent) fill = "#facc15";
-              else if (isGoal) fill = "#fca5a5";
-              else if (isStart) fill = "#93c5fd";
-              else if (inFrontier) fill = "#bfdbfe";
-              else if (isVisited) fill = "#e2e8f0";
+              let fill = "var(--viz-cell-empty)";
+              if (isWall) fill = "var(--viz-cell-wall)";
+              else if (inPath) fill = "var(--viz-cell-path)";
+              else if (isCurrent) fill = "var(--viz-cell-current)";
+              else if (isGoal) fill = "var(--viz-cell-goal)";
+              else if (isStart) fill = "var(--viz-cell-start)";
+              else if (inFrontier) fill = "var(--viz-cell-frontier)";
+              else if (isVisited) fill = "var(--viz-cell-visited)";
 
               return (
                 <g key={`cell-${key}`}>
-                  <rect x={x} y={y} width={CELL_SIZE} height={CELL_SIZE} fill={fill} stroke="#94a3b8" strokeWidth={1} />
+                  <rect x={x} y={y} width={CELL_SIZE} height={CELL_SIZE} fill={fill} stroke="var(--viz-grid-stroke)" strokeWidth={1} />
                   {snapshot.showCellValues && typeof cellValue === "number" && (
                     <text
                       x={x + CELL_SIZE / 2}
                       y={y + CELL_SIZE / 2 + 4}
                       textAnchor="middle"
-                      className={`text-[10px] ${isWall ? "fill-white" : "fill-zinc-700"}`}
+                      fill={isWall ? "var(--viz-cell-text-inverse)" : "var(--viz-cell-text)"}
+                      className="text-[10px]"
                     >
                       {cellValue}
                     </text>
@@ -79,7 +104,8 @@ export function GridBfsCanvas({ snapshot }: Props) {
                       x={x + CELL_SIZE / 2}
                       y={y + 12}
                       textAnchor="middle"
-                      className="fill-zinc-900 text-[10px] font-bold"
+                      fill="var(--viz-cell-text)"
+                      className="text-[10px] font-bold"
                     >
                       {isStart ? "S" : "G"}
                     </text>
@@ -90,17 +116,6 @@ export function GridBfsCanvas({ snapshot }: Props) {
           )}
         </svg>
       </div>
-
-      <div className="mt-3 flex flex-wrap gap-2">
-        <Badge tone="neutral">미방문</Badge>
-        <Badge tone="neutral" variant="outline">방문</Badge>
-        <Badge tone="info">frontier</Badge>
-        <Badge tone="warning">current</Badge>
-        <Badge tone="success">최종 경로</Badge>
-        <Badge tone="danger">벽</Badge>
-      </div>
-
-      {snapshot.message ? <p className="mt-2 text-sm text-zinc-700">{snapshot.message}</p> : null}
-    </section>
+    </CanvasFrame>
   );
 }

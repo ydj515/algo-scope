@@ -160,21 +160,13 @@ export const backtrackingNQueensAdapter: ProblemTraceAdapter<
     {
       key: "dedupeSymmetry",
       label: "dedupeSymmetry",
-      type: "select",
-      options: [
-        { label: "false", value: "false" },
-        { label: "true", value: "true" },
-      ],
+      type: "checkbox",
       helperText: "true면 회전/반사로 같은 해를 하나로 묶어 표시",
     },
     {
       key: "stopAfterFirst",
       label: "stopAfterFirst",
-      type: "select",
-      options: [
-        { label: "false", value: "false" },
-        { label: "true", value: "true" },
-      ],
+      type: "checkbox",
       helperText: "true면 첫 해 발견 즉시 종료",
     },
     {

@@ -2,6 +2,7 @@
 
 import type { DpSnapshot } from "@/features/problem/dp/types";
 import { Badge } from "@/features/ui/components/badge";
+import { CanvasFrame } from "@/features/ui/components/canvas-frame";
 
 type Props = {
   snapshot: DpSnapshot | null;
@@ -16,9 +17,10 @@ function key(row: number, col: number): string {
 export function DpTableCanvas({ snapshot }: Props) {
   if (!snapshot) {
     return (
-      <div className="flex h-[380px] items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50 text-sm text-zinc-500">
-        입력을 설정하고 Execute를 눌러주세요.
-      </div>
+      <CanvasFrame
+        hasData={false}
+        emptyText="입력을 설정하고 Execute를 눌러주세요."
+      />
     );
   }
 
@@ -29,24 +31,43 @@ export function DpTableCanvas({ snapshot }: Props) {
   const focusKey = snapshot.focus ? key(snapshot.focus.row, snapshot.focus.col) : "";
 
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white p-4">
+    <CanvasFrame
+      hasData
+      header={(
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm font-semibold text-[var(--color-fg)]">DP Table Canvas</p>
+          <p className="text-xs text-[var(--color-fg-muted)]">
+            rows={snapshot.rows}, cols={snapshot.cols}, answer={snapshot.answer}
+          </p>
+        </div>
+      )}
+      message={snapshot.message}
+      legend={(
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge tone="warning">현재 셀</Badge>
+          <Badge tone="info">갱신 셀</Badge>
+          <Badge tone="success">복원 경로</Badge>
+          <Badge tone="neutral">일반 셀</Badge>
+        </div>
+      )}
+    >
       <div className="overflow-auto">
-        <svg width={Math.max(width, 320)} height={Math.max(height, 120)} className="rounded-lg bg-white">
+        <svg width={Math.max(width, 320)} height={Math.max(height, 120)} className="rounded-lg bg-[var(--color-surface)]">
           {Array.from({ length: snapshot.rows }).map((_, row) =>
             Array.from({ length: snapshot.cols }).map((__, col) => {
               const x = col * CELL;
               const y = row * CELL;
               const k = key(row, col);
 
-              let fill = "#ffffff";
-              if (path.has(k) && snapshot.showPath) fill = "#bbf7d0";
-              if (changed.has(k)) fill = "#bfdbfe";
-              if (k === focusKey) fill = "#facc15";
+              let fill = "var(--viz-cell-empty)";
+              if (path.has(k) && snapshot.showPath) fill = "var(--viz-cell-path)";
+              if (changed.has(k)) fill = "var(--viz-cell-changed)";
+              if (k === focusKey) fill = "var(--viz-cell-focus)";
 
               return (
                 <g key={`dp-cell-${k}`}>
-                  <rect x={x} y={y} width={CELL} height={CELL} fill={fill} stroke="#94a3b8" strokeWidth={1} />
-                  <text x={x + CELL / 2} y={y + CELL / 2 + 4} textAnchor="middle" className="fill-zinc-800 text-[11px] font-semibold">
+                  <rect x={x} y={y} width={CELL} height={CELL} fill={fill} stroke="var(--viz-grid-stroke)" strokeWidth={1} />
+                  <text x={x + CELL / 2} y={y + CELL / 2 + 4} textAnchor="middle" className="fill-[var(--viz-cell-text)] text-[11px] font-semibold">
                     {snapshot.table[row][col]}
                   </text>
                 </g>
@@ -55,14 +76,6 @@ export function DpTableCanvas({ snapshot }: Props) {
           )}
         </svg>
       </div>
-      <div className="mt-3 flex flex-wrap items-center gap-2">
-        <Badge tone="warning">현재 셀</Badge>
-        <Badge tone="info">갱신 셀</Badge>
-        <Badge tone="success">복원 경로</Badge>
-        <Badge tone="neutral">일반 셀</Badge>
-        <Badge tone="info" variant="outline">answer: {snapshot.answer}</Badge>
-      </div>
-      {snapshot.message ? <p className="mt-2 text-sm text-zinc-700">{snapshot.message}</p> : null}
-    </section>
+    </CanvasFrame>
   );
 }

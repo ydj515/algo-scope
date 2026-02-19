@@ -1,6 +1,7 @@
 "use client";
 
 import type { ListSnapshot } from "@/features/visualizer/types";
+import { CanvasFrame } from "@/features/ui/components/canvas-frame";
 
 type Props = {
   snapshot: ListSnapshot | null;
@@ -75,9 +76,11 @@ function buildLayout(snapshot: ListSnapshot): PositionedNode[] {
 export function TreeCanvas({ snapshot }: Props) {
   if (!snapshot || snapshot.size === 0) {
     return (
-      <div className="flex h-[420px] items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50 text-sm text-zinc-500">
-        트리가 비어 있습니다.
-      </div>
+      <CanvasFrame
+        hasData={false}
+        emptyText="트리가 비어 있습니다."
+        className="h-[420px]"
+      />
     );
   }
 
@@ -86,7 +89,7 @@ export function TreeCanvas({ snapshot }: Props) {
   const byId = new Map(layout.map((item) => [item.id, item]));
 
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-3">
+    <CanvasFrame hasData className="p-3">
       <svg viewBox={`0 0 ${VIEW_WIDTH} ${VIEW_HEIGHT}`} className="h-[420px] w-full">
         {layout.map((item) => {
           const left = item.leftId === null ? null : byId.get(item.leftId);
@@ -94,8 +97,8 @@ export function TreeCanvas({ snapshot }: Props) {
 
           return (
             <g key={`edge-${item.id}`}>
-              {left ? <line x1={item.x} y1={item.y + NODE_RADIUS} x2={left.x} y2={left.y - NODE_RADIUS} stroke="#64748b" strokeWidth={2} /> : null}
-              {right ? <line x1={item.x} y1={item.y + NODE_RADIUS} x2={right.x} y2={right.y - NODE_RADIUS} stroke="#64748b" strokeWidth={2} /> : null}
+              {left ? <line x1={item.x} y1={item.y + NODE_RADIUS} x2={left.x} y2={left.y - NODE_RADIUS} stroke="var(--viz-link-default)" strokeWidth={2} /> : null}
+              {right ? <line x1={item.x} y1={item.y + NODE_RADIUS} x2={right.x} y2={right.y - NODE_RADIUS} stroke="var(--viz-link-default)" strokeWidth={2} /> : null}
             </g>
           );
         })}
@@ -111,15 +114,15 @@ export function TreeCanvas({ snapshot }: Props) {
                 cx={item.x}
                 cy={item.y}
                 r={NODE_RADIUS}
-                fill={isHighlighted ? "#fde68a" : "#e2e8f0"}
-                stroke={isHighlighted ? "#f59e0b" : "#475569"}
+                fill={isHighlighted ? "var(--viz-node-highlight)" : "var(--viz-node-default)"}
+                stroke={isHighlighted ? "var(--viz-node-highlight-stroke)" : "var(--viz-node-stroke)"}
                 strokeWidth={isHighlighted ? 3 : 2}
               />
-              <text x={item.x} y={item.y + 4} textAnchor="middle" className="fill-zinc-900 text-xs font-semibold">
+              <text x={item.x} y={item.y + 4} textAnchor="middle" className="fill-[var(--viz-cell-text)] text-xs font-semibold">
                 {node.value}
               </text>
               {isRoot ? (
-                <text x={item.x} y={item.y - 30} textAnchor="middle" className="fill-blue-600 text-[11px] font-bold">
+                <text x={item.x} y={item.y - 30} textAnchor="middle" className="fill-[var(--viz-label-head)] text-[11px] font-bold">
                   ROOT
                 </text>
               ) : null}
@@ -127,6 +130,6 @@ export function TreeCanvas({ snapshot }: Props) {
           );
         })}
       </svg>
-    </div>
+    </CanvasFrame>
   );
 }

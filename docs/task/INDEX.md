@@ -2,6 +2,10 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-046 | CanvasFrame header 슬롯 추가 및 캔버스 상단 메타 공통화 | done | codex | 2026-02-19 | 2026-02-19 | `docs/task/TASK-046.md` |
+| TASK-045 | 잔여 6개 캔버스 CanvasFrame+색상 토큰 통일 및 Field(Number/Checkbox) 확장 | done | codex | 2026-02-19 | 2026-02-19 | `docs/task/TASK-045.md` |
+| TASK-044 | CanvasFrame 도입 + Grid BFS/DFS/DP SVG 색상 토큰화 + RangeField 공통화 | done | codex | 2026-02-18 | 2026-02-19 | `docs/task/TASK-044.md` |
+| TASK-043 | 공통 UI 컴포넌트 추출 상태 점검 Audit | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-043.md` |
 | TASK-042 | Badge 범위 확장(스텝 리스트/캔버스 범례) + 모바일 테마 외부 클릭 닫힘 + Field 공통화 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-042.md` |
 | TASK-041 | 공통 Badge 도입 및 Shell 메시지 표준화 + 모바일 테마 드롭다운 최적화 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-041.md` |
 | TASK-040 | 테마 드롭다운 전환 + semantic tone 확장 + VisualizerShell/TraceShell 공통 UI 전면 적용 | done | codex | 2026-02-18 | 2026-02-18 | `docs/task/TASK-040.md` |

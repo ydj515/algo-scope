@@ -1,6 +1,7 @@
 "use client";
 
 import type { BacktrackingSnapshot } from "@/features/problem/backtracking/types";
+import { CanvasFrame } from "@/features/ui/components/canvas-frame";
 
 type Props = { snapshot: BacktrackingSnapshot | null };
 
@@ -9,9 +10,11 @@ const CELL = 40;
 export function NQueensCanvas({ snapshot }: Props) {
   if (!snapshot || !snapshot.boardSize) {
     return (
-      <div className="flex h-[320px] items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50 text-sm text-zinc-500">
-        입력을 설정하고 Execute를 눌러주세요.
-      </div>
+      <CanvasFrame
+        hasData={false}
+        emptyText="입력을 설정하고 Execute를 눌러주세요."
+        className="h-[320px]"
+      />
     );
   }
 
@@ -19,7 +22,16 @@ export function NQueensCanvas({ snapshot }: Props) {
   const queens = snapshot.queenCols ?? [];
 
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white p-4">
+    <CanvasFrame
+      hasData
+      header={(
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm font-semibold text-[var(--color-fg)]">N-Queens Board</p>
+          <p className="text-xs text-[var(--color-fg-muted)]">n={n}, placed={queens.length}</p>
+        </div>
+      )}
+      message={`현재 배치: [${queens.join(", ")}]`}
+    >
       <div className="overflow-auto">
         <svg width={n * CELL} height={n * CELL}>
           {Array.from({ length: n }).map((_, row) =>
@@ -31,9 +43,9 @@ export function NQueensCanvas({ snapshot }: Props) {
 
               return (
                 <g key={`q-${row}-${col}`}>
-                  <rect x={x} y={y} width={CELL} height={CELL} fill={isDark ? "#cbd5e1" : "#f8fafc"} stroke="#94a3b8" strokeWidth={1} />
+                  <rect x={x} y={y} width={CELL} height={CELL} fill={isDark ? "var(--viz-nq-cell-dark)" : "var(--viz-nq-cell-light)"} stroke="var(--viz-grid-stroke)" strokeWidth={1} />
                   {hasQueen ? (
-                    <text x={x + CELL / 2} y={y + CELL / 2 + 4} textAnchor="middle" className="fill-rose-700 text-sm font-bold">
+                    <text x={x + CELL / 2} y={y + CELL / 2 + 4} textAnchor="middle" className="fill-[var(--viz-nq-queen)] text-sm font-bold">
                       Q
                     </text>
                   ) : null}
@@ -43,7 +55,6 @@ export function NQueensCanvas({ snapshot }: Props) {
           )}
         </svg>
       </div>
-      <p className="mt-2 text-sm text-zinc-700">현재 배치: [{queens.join(", ")}]</p>
-    </section>
+    </CanvasFrame>
   );
 }

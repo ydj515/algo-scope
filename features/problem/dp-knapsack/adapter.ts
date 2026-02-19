@@ -361,11 +361,7 @@ export const dpKnapsackAdapter: ProblemTraceAdapter<DpKnapsackInput, DpSnapshot>
     {
       key: "showPath",
       label: "answerView",
-      type: "select",
-      options: [
-        { label: "답만", value: "false" },
-        { label: "복원 경로 포함", value: "true" },
-      ],
+      type: "checkbox",
       helperText: "선택 아이템 복원 표시",
     },
   ],

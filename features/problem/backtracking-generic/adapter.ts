@@ -127,11 +127,7 @@ export const backtrackingGenericAdapter: ProblemTraceAdapter<
     {
       key: "stopAfterFirst",
       label: "stopAfterFirst",
-      type: "select",
-      options: [
-        { label: "false", value: "false" },
-        { label: "true", value: "true" },
-      ],
+      type: "checkbox",
       helperText: "true면 첫 해 발견 즉시 종료",
     },
     {

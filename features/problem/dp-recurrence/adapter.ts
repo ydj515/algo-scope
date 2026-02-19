@@ -314,11 +314,7 @@ export const dpRecurrenceAdapter: ProblemTraceAdapter<DpRecurrenceInput, DpSnaps
     {
       key: "showPath",
       label: "answerView",
-      type: "select",
-      options: [
-        { label: "답만", value: "false" },
-        { label: "복원 경로 포함", value: "true" },
-      ],
+      type: "checkbox",
       helperText: "복원 경로는 min predecessor 휴리스틱 사용",
     },
   ],

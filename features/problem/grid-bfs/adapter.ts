@@ -644,11 +644,7 @@ export const gridBfsAdapter: ProblemTraceAdapter<GridBfsInput, GridBfsSnapshot> 
     {
       key: "showCellValues",
       label: "showCellValues",
-      type: "select",
-      options: [
-        { label: "표시 안함", value: "false" },
-        { label: "숫자 표시", value: "true" },
-      ],
+      type: "checkbox",
       helperText: "matrix 모드에서 셀 숫자 오버레이 표시 여부",
       group: "Map 입력(권장)",
       visible: (input) => input.mapMode === "matrix",

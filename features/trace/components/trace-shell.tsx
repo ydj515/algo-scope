@@ -7,7 +7,14 @@ import { useTraceStepper } from "@/features/trace/use-trace-stepper";
 import { Button } from "@/features/ui/components/button";
 import { Card } from "@/features/ui/components/card";
 import { Badge } from "@/features/ui/components/badge";
-import { InputField, SelectField, TextareaField } from "@/features/ui/components/field";
+import {
+  CheckboxField,
+  InputField,
+  NumberField,
+  RangeField,
+  SelectField,
+  TextareaField,
+} from "@/features/ui/components/field";
 
 type RendererProps<TSnapshot> = {
   snapshot: TSnapshot | null;
@@ -154,6 +161,80 @@ export function TraceShell<TInput extends Record<string, string>, TSnapshot>({
   };
   const visibleSteps = steps.slice(Math.max(0, currentIndex - 4), currentIndex + 1);
 
+  const renderFormField = (field: typeof visibleFields[number]) => {
+    const value = formInput[field.key] ?? "";
+    const updateValue = (nextValue: string) => {
+      const next = {
+        ...formInput,
+        [field.key]: nextValue,
+      };
+      updateFormInput(next);
+    };
+
+    switch (field.type) {
+      case "textarea":
+        return (
+          <TextareaField
+            key={field.key}
+            label={field.label}
+            helperText={field.helperText}
+            rows={3}
+            value={value}
+            placeholder={field.placeholder}
+            onChange={(event) => updateValue(event.target.value)}
+          />
+        );
+      case "select":
+        return (
+          <SelectField
+            key={field.key}
+            label={field.label}
+            helperText={field.helperText}
+            value={value}
+            options={(field.options ?? []).map((option) => ({
+              label: option.label,
+              value: option.value,
+            }))}
+            onChange={(event) => updateValue(event.target.value)}
+          />
+        );
+      case "number":
+        return (
+          <NumberField
+            key={field.key}
+            label={field.label}
+            helperText={field.helperText}
+            value={value}
+            placeholder={field.placeholder}
+            onChange={(event) => updateValue(event.target.value)}
+          />
+        );
+      case "checkbox":
+        return (
+          <CheckboxField
+            key={field.key}
+            label={field.label}
+            helperText={field.helperText}
+            checked={value === "true"}
+            onChange={(event) => updateValue(event.target.checked ? "true" : "false")}
+          />
+        );
+      case "text":
+      default:
+        return (
+          <InputField
+            key={field.key}
+            label={field.label}
+            helperText={field.helperText}
+            type="text"
+            value={value}
+            placeholder={field.placeholder}
+            onChange={(event) => updateValue(event.target.value)}
+          />
+        );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[var(--color-bg)] px-4 py-8 text-[var(--color-fg)] sm:px-8 motion-fade-in">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4">
@@ -196,59 +277,7 @@ export function TraceShell<TInput extends Record<string, string>, TSnapshot>({
                 <Card key={group.name} className="rounded-[var(--radius-md)] p-3">
                   <h3 className="mb-3 text-sm font-semibold text-[var(--color-fg)]">{group.name}</h3>
                   <div className="grid gap-3 sm:grid-cols-2">
-                    {group.fields.map((field) => (
-                      field.type === "textarea" ? (
-                        <TextareaField
-                          key={field.key}
-                          label={field.label}
-                          helperText={field.helperText}
-                          rows={3}
-                          value={formInput[field.key] ?? ""}
-                          placeholder={field.placeholder}
-                          onChange={(event) => {
-                            const next = {
-                              ...formInput,
-                              [field.key]: event.target.value,
-                            };
-                            updateFormInput(next);
-                          }}
-                        />
-                      ) : field.type === "select" ? (
-                        <SelectField
-                          key={field.key}
-                          label={field.label}
-                          helperText={field.helperText}
-                          value={formInput[field.key] ?? ""}
-                          options={(field.options ?? []).map((option) => ({
-                            label: option.label,
-                            value: option.value,
-                          }))}
-                          onChange={(event) => {
-                            const next = {
-                              ...formInput,
-                              [field.key]: event.target.value,
-                            };
-                            updateFormInput(next);
-                          }}
-                        />
-                      ) : (
-                        <InputField
-                          key={field.key}
-                          label={field.label}
-                          helperText={field.helperText}
-                          type={field.type === "number" ? "number" : "text"}
-                          value={formInput[field.key] ?? ""}
-                          placeholder={field.placeholder}
-                          onChange={(event) => {
-                            const next = {
-                              ...formInput,
-                              [field.key]: event.target.value,
-                            };
-                            updateFormInput(next);
-                          }}
-                        />
-                      )
-                    ))}
+                    {group.fields.map((field) => renderFormField(field))}
                   </div>
                 </Card>
               ))}
@@ -332,13 +361,12 @@ export function TraceShell<TInput extends Record<string, string>, TSnapshot>({
           </Button>
           <Button onClick={reset} variant="outline" tone="neutral">Reset Step</Button>
 
-          <input
-            type="range"
+          <RangeField
             min={0}
             max={Math.max(steps.length - 1, 0)}
             value={currentIndex}
             onChange={(event) => jumpTo(Number(event.target.value))}
-            className="ml-auto w-48"
+            wrapperClassName="ml-auto w-48"
           />
         </Card>
 

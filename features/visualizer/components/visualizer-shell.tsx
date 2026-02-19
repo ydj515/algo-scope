@@ -7,7 +7,7 @@ import type { ListSnapshot, Step } from "@/features/visualizer/types";
 import { Button } from "@/features/ui/components/button";
 import { Card } from "@/features/ui/components/card";
 import { Badge } from "@/features/ui/components/badge";
-import { InputField, SelectField } from "@/features/ui/components/field";
+import { InputField, RangeField, SelectField } from "@/features/ui/components/field";
 
 type RendererProps<TSnapshot extends ListSnapshot> = {
   snapshot: TSnapshot | null;
@@ -208,13 +208,12 @@ export function VisualizerShell<
           </Button>
           <Button onClick={reset} variant="outline" tone="neutral">Reset Step</Button>
 
-          <input
-            type="range"
+          <RangeField
             min={0}
             max={Math.max(steps.length - 1, 0)}
             value={currentIndex}
             onChange={(event) => jumpTo(Number(event.target.value))}
-            className="ml-auto w-48"
+            wrapperClassName="ml-auto w-48"
           />
         </Card>
 

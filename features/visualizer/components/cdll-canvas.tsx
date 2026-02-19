@@ -1,6 +1,7 @@
 "use client";
 
 import type { ListSnapshot } from "@/features/visualizer/types";
+import { CanvasFrame } from "@/features/ui/components/canvas-frame";
 
 type Props = {
   snapshot: ListSnapshot | null;
@@ -20,12 +21,12 @@ const NODE_LABEL_OFFSET_Y = 4;
 const HEAD_BADGE_OFFSET_Y = -32;
 const TAIL_BADGE_OFFSET_Y = 40;
 
-const EDGE_NEXT_COLOR = "#334155";
-const EDGE_PREV_COLOR = "#16a34a";
-const NODE_FILL_DEFAULT = "#e2e8f0";
-const NODE_FILL_HIGHLIGHT = "#fde68a";
-const NODE_STROKE_DEFAULT = "#475569";
-const NODE_STROKE_HIGHLIGHT = "#f59e0b";
+const EDGE_NEXT_COLOR = "var(--viz-link-next)";
+const EDGE_PREV_COLOR = "var(--viz-link-prev)";
+const NODE_FILL_DEFAULT = "var(--viz-node-default)";
+const NODE_FILL_HIGHLIGHT = "var(--viz-node-highlight)";
+const NODE_STROKE_DEFAULT = "var(--viz-node-stroke)";
+const NODE_STROKE_HIGHLIGHT = "var(--viz-node-highlight-stroke)";
 const NODE_STROKE_WIDTH_DEFAULT = 2;
 const NODE_STROKE_WIDTH_HIGHLIGHT = 3;
 const EDGE_NEXT_WIDTH = 1.5;
@@ -43,12 +44,11 @@ function polarToCartesian(radius: number, angle: number) {
 export function CdllCanvas({ snapshot }: Props) {
   if (!snapshot || snapshot.size === 0) {
     return (
-      <div
-        style={{ height: EMPTY_CANVAS_HEIGHT }}
-        className="flex items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50 text-sm text-zinc-500"
-      >
-        리스트가 비어 있습니다.
-      </div>
+      <CanvasFrame
+        hasData={false}
+        emptyText="리스트가 비어 있습니다."
+        className="h-[360px]"
+      />
     );
   }
 
@@ -63,7 +63,7 @@ export function CdllCanvas({ snapshot }: Props) {
   const highlightedNodes = new Set(snapshot.highlights?.nodeIds ?? []);
 
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-3">
+    <CanvasFrame hasData className="p-3">
       <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="w-full" style={{ height: EMPTY_CANVAS_HEIGHT }}>
         <defs>
           <marker id="arrow-next" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -131,18 +131,18 @@ export function CdllCanvas({ snapshot }: Props) {
                 stroke={isHighlighted ? NODE_STROKE_HIGHLIGHT : NODE_STROKE_DEFAULT}
                 strokeWidth={isHighlighted ? NODE_STROKE_WIDTH_HIGHLIGHT : NODE_STROKE_WIDTH_DEFAULT}
               />
-              <text x={pos.x} y={pos.y + NODE_LABEL_OFFSET_Y} textAnchor="middle" className="fill-zinc-900 text-xs font-semibold">
+              <text x={pos.x} y={pos.y + NODE_LABEL_OFFSET_Y} textAnchor="middle" className="fill-[var(--viz-cell-text)] text-xs font-semibold">
                 {node.value}
               </text>
 
               {isHead ? (
-                <text x={pos.x} y={pos.y + HEAD_BADGE_OFFSET_Y} textAnchor="middle" className="fill-blue-600 text-[11px] font-bold">
+                <text x={pos.x} y={pos.y + HEAD_BADGE_OFFSET_Y} textAnchor="middle" className="fill-[var(--viz-label-head)] text-[11px] font-bold">
                   HEAD
                 </text>
               ) : null}
 
               {isTail ? (
-                <text x={pos.x} y={pos.y + TAIL_BADGE_OFFSET_Y} textAnchor="middle" className="fill-emerald-600 text-[11px] font-bold">
+                <text x={pos.x} y={pos.y + TAIL_BADGE_OFFSET_Y} textAnchor="middle" className="fill-[var(--viz-label-tail)] text-[11px] font-bold">
                   TAIL
                 </text>
               ) : null}
@@ -150,6 +150,6 @@ export function CdllCanvas({ snapshot }: Props) {
           );
         })}
       </svg>
-    </div>
+    </CanvasFrame>
   );
 }

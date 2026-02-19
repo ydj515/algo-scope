@@ -1,6 +1,6 @@
 import type { TraceResult } from "@/features/trace/types";
 
-export type InputFieldType = "number" | "text" | "textarea" | "select";
+export type InputFieldType = "number" | "text" | "textarea" | "select" | "checkbox";
 
 export type InputFieldConfig<TInput extends Record<string, string>> = {
   key: keyof TInput & string;

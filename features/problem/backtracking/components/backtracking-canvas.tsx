@@ -2,6 +2,8 @@
 
 import type { BacktrackingSnapshot } from "@/features/problem/backtracking/types";
 import type { TraceStep } from "@/features/trace/types";
+import { Badge } from "@/features/ui/components/badge";
+import { CanvasFrame } from "@/features/ui/components/canvas-frame";
 
 type Props = {
   snapshot: BacktrackingSnapshot | null;
@@ -211,18 +213,38 @@ function colorForNode(
   solutionPathSet: Set<string>,
 ) {
   if (key === activeKey && phase === "prune") {
-    return { fill: "#fecaca", stroke: "#dc2626", text: "#7f1d1d" };
+    return {
+      fill: "var(--viz-bt-prune-fill)",
+      stroke: "var(--viz-bt-prune-stroke)",
+      text: "var(--viz-bt-prune-text)",
+    };
   }
   if (key === activeKey && phase === "exit") {
-    return { fill: "#bbf7d0", stroke: "#16a34a", text: "#14532d" };
+    return {
+      fill: "var(--viz-bt-solution-fill)",
+      stroke: "var(--viz-bt-solution-stroke)",
+      text: "var(--viz-bt-solution-text)",
+    };
   }
   if (solutionPathSet.has(key)) {
-    return { fill: "#dcfce7", stroke: "#22c55e", text: "#14532d" };
+    return {
+      fill: "var(--viz-bt-solution-fill)",
+      stroke: "var(--viz-bt-solution-stroke)",
+      text: "var(--viz-bt-solution-text)",
+    };
   }
   if (currentPathSet.has(key)) {
-    return { fill: "#dbeafe", stroke: "#2563eb", text: "#1e3a8a" };
+    return {
+      fill: "var(--viz-bt-path-fill)",
+      stroke: "var(--viz-bt-path-stroke)",
+      text: "var(--viz-bt-path-text)",
+    };
   }
-  return { fill: "#e2e8f0", stroke: "#64748b", text: "#0f172a" };
+  return {
+    fill: "var(--viz-node-default)",
+    stroke: "var(--viz-node-stroke)",
+    text: "var(--viz-cell-text)",
+  };
 }
 
 export function BacktrackingCanvas({
@@ -233,9 +255,11 @@ export function BacktrackingCanvas({
 }: Props) {
   if (!snapshot) {
     return (
-      <div className="flex h-[320px] items-center justify-center rounded-xl border border-dashed border-zinc-300 bg-zinc-50 text-sm text-zinc-500">
-        입력을 설정하고 Execute를 눌러주세요.
-      </div>
+      <CanvasFrame
+        hasData={false}
+        emptyText="입력을 설정하고 Execute를 눌러주세요."
+        className="h-[320px]"
+      />
     );
   }
 
@@ -300,15 +324,27 @@ export function BacktrackingCanvas({
   const activeKey = pathKey(activePath);
 
   return (
-    <section className="space-y-3 rounded-xl border border-zinc-200 bg-white p-4">
-      <div className="grid gap-2 text-sm text-zinc-700 lg:grid-cols-2">
-        <p>nodes: {sampledNodes.length} / {tree.size} (max 200)</p>
-        <p>phase: <span className="font-semibold">{phase ?? "-"}</span></p>
-        <p>depth: {snapshot.depth}</p>
-        <p>currentChoice: {snapshot.currentChoice ?? "-"}</p>
-      </div>
-
-      <div className="overflow-auto rounded-lg border border-zinc-200 bg-zinc-50">
+    <CanvasFrame
+      hasData
+      header={(
+        <div className="grid gap-2 text-sm text-[var(--color-fg-muted)] lg:grid-cols-2">
+          <p className="font-semibold text-[var(--color-fg)]">Backtracking Tree</p>
+          <p>phase: <span className="font-semibold text-[var(--color-fg)]">{phase ?? "-"}</span></p>
+          <p>nodes: {sampledNodes.length} / {tree.size} (max 200)</p>
+          <p>depth: {snapshot.depth}, currentChoice: {snapshot.currentChoice ?? "-"}</p>
+        </div>
+      )}
+      message={snapshot.message}
+      legend={(
+        <div className="flex flex-wrap gap-2">
+          <Badge tone="danger">prune</Badge>
+          <Badge tone="success">solution(exit)</Badge>
+          <Badge tone="info">current path</Badge>
+          <Badge tone="neutral">normal</Badge>
+        </div>
+      )}
+    >
+      <div className="overflow-auto rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-muted)]">
         <svg width={width} height={height}>
           {[...sampledNodes].map((node) => {
             if (!node.parentKey) {
@@ -326,7 +362,7 @@ export function BacktrackingCanvas({
                 y1={from.y}
                 x2={to.x}
                 y2={to.y}
-                stroke="#94a3b8"
+                stroke="var(--viz-grid-stroke)"
                 strokeWidth={1.5}
               />
             );
@@ -359,7 +395,8 @@ export function BacktrackingCanvas({
                   x={pos.x}
                   y={pos.y + 4}
                   textAnchor="middle"
-                  className="fill-zinc-900 text-[10px] font-semibold"
+                  style={{ fill: color.text }}
+                  className="text-[10px] font-semibold"
                 >
                   {node.value === null ? "R" : String(node.value)}
                 </text>
@@ -369,8 +406,8 @@ export function BacktrackingCanvas({
         </svg>
       </div>
 
-      <section className="rounded-lg border border-zinc-200 p-3">
-        <p className="text-sm font-semibold text-zinc-800">Depth Lane</p>
+      <section className="rounded-lg border border-[var(--color-border)] p-3">
+        <p className="text-sm font-semibold text-[var(--color-fg)]">Depth Lane</p>
         <div className="mt-2 space-y-1 text-sm">
           {Array.from({ length: laneDepthMax + 1 }).map((_, depth) => {
             const chosen = snapshot.partial[depth];
@@ -378,13 +415,13 @@ export function BacktrackingCanvas({
             const laneCandidates = isActiveDepth ? snapshot.candidates : [];
             return (
               <div key={`lane-${depth}`} className="flex min-h-7 items-center gap-2">
-                <span className="w-16 text-xs font-semibold text-zinc-500">depth {depth}</span>
-                <span className="w-20 text-xs text-zinc-700">
+                <span className="w-16 text-xs font-semibold text-[var(--color-fg-muted)]">depth {depth}</span>
+                <span className="w-20 text-xs text-[var(--color-fg-muted)]">
                   choice: {chosen === undefined ? "-" : chosen}
                 </span>
                 <div className="flex flex-wrap gap-1">
                   {laneCandidates.length === 0 ? (
-                    <span className="text-xs text-zinc-400">candidates -</span>
+                    <span className="text-xs text-[var(--color-fg-muted)]">candidates -</span>
                   ) : (
                     laneCandidates.map((candidate) => {
                       const isCurrent = isActiveDepth && snapshot.currentChoice === candidate;
@@ -393,8 +430,8 @@ export function BacktrackingCanvas({
                           key={`cand-${depth}-${candidate}`}
                           className={`rounded border px-1.5 py-0.5 text-xs ${
                             isCurrent
-                              ? "border-blue-600 bg-blue-100 text-blue-700"
-                              : "border-zinc-300 bg-white text-zinc-700"
+                              ? "border-[var(--viz-bt-lane-current-stroke)] bg-[var(--viz-bt-lane-current-fill)] text-[var(--viz-bt-lane-current-text)]"
+                              : "border-[var(--viz-bt-lane-candidate-stroke)] bg-[var(--viz-bt-lane-candidate-fill)] text-[var(--viz-bt-lane-candidate-text)]"
                           }`}
                         >
                           {candidate}
@@ -407,12 +444,10 @@ export function BacktrackingCanvas({
             );
           })}
         </div>
-        <p className="mt-2 text-xs text-zinc-500">
+        <p className="mt-2 text-xs text-[var(--color-fg-muted)]">
           색상: prune(빨강), solution(exit, 초록), 현재 경로(파랑)
         </p>
       </section>
-
-      {snapshot.message ? <p className="text-sm text-zinc-700">{snapshot.message}</p> : null}
-    </section>
+    </CanvasFrame>
   );
 }
