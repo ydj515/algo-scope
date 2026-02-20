@@ -21,6 +21,8 @@ export function GlobalNav() {
       : pathname.startsWith("/problems/backtracking-")
         ? "Backtracking"
         : null;
+  const navHoverClass =
+    "cursor-pointer transition-all duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-surface-muted)] hover:text-[var(--color-primary)]";
 
   return (
     <header className="border-b border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-surface)_88%,transparent)] backdrop-blur motion-fade-in">
@@ -31,7 +33,13 @@ export function GlobalNav() {
           </Link>
           <div className="flex items-center gap-2">
             <nav className="flex items-center gap-2">
-              <Button href="/ds" variant={isDs ? "solid" : "outline"} size="sm" tone={isDs ? "primary" : "neutral"}>
+              <Button
+                href="/ds"
+                variant={isDs ? "solid" : "outline"}
+                size="sm"
+                tone={isDs ? "primary" : "neutral"}
+                className={navHoverClass}
+              >
                 Data Structures
               </Button>
               <Button
@@ -39,6 +47,7 @@ export function GlobalNav() {
                 variant={isProblems ? "solid" : "outline"}
                 size="sm"
                 tone={isProblems ? "primary" : "neutral"}
+                className={navHoverClass}
               >
                 Problem Solving
               </Button>

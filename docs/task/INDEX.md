@@ -2,6 +2,9 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-049 | GlobalNav 상단 2개 탭(Data Structures/Problem Solving) hover 인터랙션 통일 | done | codex | 2026-02-19 | 2026-02-19 | `docs/task/TASK-049.md` |
+| TASK-048 | 테마 토글 버튼 hover 상호작용 강화(cursor/시각 피드백) | done | codex | 2026-02-19 | 2026-02-19 | `docs/task/TASK-048.md` |
+| TASK-047 | 테마 토글을 Sun/Moon 아이콘 버튼으로 단순화(system 제거) | in_progress | codex | 2026-02-19 |  | `docs/task/TASK-047.md` |
 | TASK-046 | CanvasFrame header 슬롯 추가 및 캔버스 상단 메타 공통화 | done | codex | 2026-02-19 | 2026-02-19 | `docs/task/TASK-046.md` |
 | TASK-045 | 잔여 6개 캔버스 CanvasFrame+색상 토큰 통일 및 Field(Number/Checkbox) 확장 | done | codex | 2026-02-19 | 2026-02-19 | `docs/task/TASK-045.md` |
 | TASK-044 | CanvasFrame 도입 + Grid BFS/DFS/DP SVG 색상 토큰화 + RangeField 공통화 | done | codex | 2026-02-18 | 2026-02-19 | `docs/task/TASK-044.md` |
