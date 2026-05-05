@@ -1,23 +1,23 @@
 # Repository Guidelines (Hub)
 
-이 문서는 요약 허브입니다. 세부 규칙은 `docs/agent/*.md`를 참조합니다.
+This document is a summary hub. For detailed rules, refer to `docs/agent/*.md`.
 
-## 절대 규칙
-- 작업 시작 전에 `docs/task/TASK-XXX.md`를 생성합니다.
-- 작업 파일을 만들거나 상태를 바꿀 때마다 `docs/task/INDEX.md`를 같은 커밋에서 갱신합니다.
-- Codex 실행 정책은 `.codex/rules/*.rules`에서 관리합니다.
-- `docs/*.md` 및 `docs/task/*.md`에서 저장소 로컬 절대경로(`/Users/...`) 표기를 금지하고 상대경로만 사용합니다.
+## Mandatory Rules
+- Create `docs/task/TASK-XXX.md` before starting any task.
+- Whenever a task file is created or its status changes, update `docs/task/INDEX.md` in the same commit.
+- Codex execution policies are managed in `.codex/rules/*.rules`.
+- Do not use repository-local absolute paths such as `/Users/...` in `docs/*.md` or `docs/task/*.md`; use relative paths only.
 
-## 세부 정책 문서
-- 프로젝트 구조: `docs/agent/project-structure.md`
-- 개발 명령: `docs/agent/dev-commands.md`
-- 코딩 스타일: `docs/agent/coding-style.md`
-- 테스트: `docs/agent/testing.md`
-- 커밋/PR: `docs/agent/commit-pr.md`
-- 보안/설정: `docs/agent/security.md`
-- 작업 추적: `docs/agent/task-tracking.md`
-- Codex 실행 정책: `docs/agent/codex-rules-policy.md`
+## Detailed Policy Documents
+- Project structure: `docs/agent/project-structure.md`
+- Development commands: `docs/agent/dev-commands.md`
+- Coding style: `docs/agent/coding-style.md`
+- Testing: `docs/agent/testing.md`
+- Commits and pull requests: `docs/agent/commit-pr.md`
+- Security and configuration: `docs/agent/security.md`
+- Task tracking: `docs/agent/task-tracking.md`
+- Codex execution policy: `docs/agent/codex-rules-policy.md`
 
-## 유지보수 원칙
-- 기존 정책을 바꿀 때는 해당 세부 문서를 수정하고, 필요하면 이 허브 링크도 함께 갱신합니다.
-- 문서 경로를 변경하면 관련 참조(`AGENTS.md`, `docs/task/INDEX.md`, 작업 파일 notes)를 함께 수정합니다.
+## Maintenance Principles
+- When changing an existing policy, update the relevant detailed document and, if needed, update this hub's links as well.
+- When moving documentation paths, update all related references, including `AGENTS.md`, `docs/task/INDEX.md`, and task file notes.
