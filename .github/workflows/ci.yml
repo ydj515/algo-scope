@@ -1,0 +1,261 @@
+name: Required Checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: required-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  required-checks:
+    name: required-checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.12.0
+          cache: npm
+
+      - name: Restore Next.js cache
+        uses: actions/cache@v5
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-next-${{ hashFiles('package-lock.json', 'next.config.ts', 'tsconfig.json', 'app/**/*.ts', 'app/**/*.tsx', 'features/**/*.ts', 'features/**/*.tsx') }}
+          restore-keys: |
+            ${{ runner.os }}-next-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test:ci
+
+      - name: Prepare coverage report content
+        if: always()
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('node:fs')
+            const coveragePath = 'coverage/coverage-summary.json'
+            const junitPath = 'reports/junit.xml'
+            const marker = '<!-- coverage-report -->'
+
+            if (!fs.existsSync(coveragePath)) {
+              core.info('coverage summary file not found')
+              return
+            }
+
+            const metricDefs = [
+              ['lines', 'Lines'],
+              ['statements', 'Statements'],
+              ['functions', 'Functions'],
+              ['branches', 'Branches'],
+            ]
+            const coverage = JSON.parse(fs.readFileSync(coveragePath, 'utf8')).total
+            const formatPercent = (value) => `${Number(value).toFixed(2)}%`
+            const parseMetrics = (body) => {
+              const metrics = {}
+              for (const [, label] of metricDefs) {
+                const bulletMatch = body.match(new RegExp(`^- ${label}: ([0-9]+(?:\\.[0-9]+)?)%`, 'm'))
+                const tableMatch = body.match(new RegExp(`^\\|\\s*${label}\\s*\\|\\s*([0-9]+(?:\\.[0-9]+)?)%\\s*\\|`, 'm'))
+                const match = bulletMatch ?? tableMatch
+                metrics[label] = match ? Number(match[1]) : null
+              }
+              return metrics
+            }
+            const formatDelta = (current, previous) => {
+              if (current === null || previous === null) {
+                return null
+              }
+              const diff = current - previous
+              const sign = diff > 0 ? '+' : diff < 0 ? '' : ''
+              const normalized = diff === 0 ? '0.00' : diff.toFixed(2)
+              const direction = diff > 0 ? '증가' : diff < 0 ? '감소' : '변화 없음'
+              const indicator = diff > 0 ? '🟢▲' : diff < 0 ? '🔴▼' : '-'
+              return {
+                delta: `${sign}${normalized}%p`,
+                description: `${indicator} ${sign}${normalized}%p ${direction}`,
+              }
+            }
+
+            let testLine = '- Test result: unavailable'
+            if (fs.existsSync(junitPath)) {
+              const xml = fs.readFileSync(junitPath, 'utf8')
+              const tests = (xml.match(/tests=\"([^\"]+)\"/) || [])[1]
+              const failures = (xml.match(/failures=\"([^\"]+)\"/) || [])[1]
+              const errors = (xml.match(/errors=\"([^\"]+)\"/) || [])[1]
+              if (tests) {
+                testLine = `- Test result: ${tests} tests, ${failures || 0} failures, ${errors || 0} errors`
+              }
+            }
+
+            let existing = null
+            if (context.eventName === 'pull_request') {
+              const { owner, repo } = context.repo
+              const issue_number = context.issue.number
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner,
+                repo,
+                issue_number,
+              })
+              existing = comments.find((comment) => comment.body && comment.body.includes(marker)) ?? null
+            }
+
+            const previousMetrics = existing ? parseMetrics(existing.body || '') : {}
+            const isFirstRun = Object.values(previousMetrics).every((value) => value === null || value === undefined)
+            const metricTableLines = [
+              '## Metrics Summary',
+              '',
+              '| Metric | Current | Previous | Delta | Status |',
+              '|---|---:|---:|---:|---|',
+            ]
+
+            for (const [key, label] of metricDefs) {
+              const current = Number(coverage[key].pct)
+              const previous = previousMetrics[label] ?? null
+              const delta = formatDelta(current, previous)
+
+              if (!delta) {
+                metricTableLines.push(`| ${label} | ${formatPercent(current)} | 없음 | 기준 없음 | 이전 비교 기준 없음 |`)
+                continue
+              }
+
+              const statusLabel = delta.description.replace(`${delta.delta} `, '')
+              metricTableLines.push(`| ${label} | ${formatPercent(current)} | ${formatPercent(previous)} | ${delta.delta} | ${statusLabel} |`)
+            }
+
+            const noteLines = isFirstRun ? ['', '- Previous report: 없음 (첫 실행)'] : []
+
+            const sharedBody = [
+              '## Coverage Report',
+              '',
+              testLine,
+              '',
+              ...metricTableLines,
+              ...noteLines,
+            ]
+
+            const commentBody = [
+              marker,
+              ...sharedBody,
+              '',
+              `- Artifact: test-results-${process.env.GITHUB_SHA}`,
+              `- Artifact: coverage-report-${process.env.GITHUB_SHA}`,
+              '',
+              '_This comment is updated automatically by CI._',
+            ]
+            const summaryBody = [
+              '## Test & Coverage Summary',
+              '',
+              testLine,
+              '',
+              ...metricTableLines,
+              ...noteLines,
+              '',
+              '- JUnit: reports/junit.xml',
+              '- Coverage HTML: coverage/index.html',
+            ]
+
+            fs.mkdirSync('reports', { recursive: true })
+            fs.writeFileSync('reports/coverage-comment.md', commentBody.join('\n'))
+            fs.writeFileSync('reports/coverage-summary.md', summaryBody.join('\n'))
+
+      - name: Append test summary
+        if: always()
+        run: |
+          if [ -f reports/coverage-summary.md ]; then
+            cat reports/coverage-summary.md >> "$GITHUB_STEP_SUMMARY"
+            printf '\n' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Upload test result artifact
+        if: always() && (github.event_name == 'pull_request' || github.ref == 'refs/heads/main')
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ github.sha }}
+          path: reports/junit.xml
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Upload coverage artifact
+        if: always() && (github.event_name == 'pull_request' || github.ref == 'refs/heads/main')
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-${{ github.sha }}
+          path: coverage
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Update PR coverage comment
+        if: always() && github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const fs = require('node:fs')
+            const path = 'reports/coverage-comment.md'
+            if (!fs.existsSync(path)) {
+              core.info('coverage comment file not found')
+              return
+            }
+            const marker = '<!-- coverage-report -->'
+            const body = fs.readFileSync(path, 'utf8')
+            const { owner, repo } = context.repo
+            const issue_number = context.issue.number
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number,
+            })
+            const existing = comments.find((comment) => comment.body && comment.body.includes(marker))
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: existing.id,
+                body,
+              })
+              return
+            }
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number,
+              body,
+            })
+
+      - name: Note skipped PR coverage comment
+        if: always() && github.event_name == 'pull_request' && (github.actor == 'dependabot[bot]' || github.event.pull_request.head.repo.full_name != github.repository)
+        run: |
+          echo 'Skipping PR coverage comment because GITHUB_TOKEN is read-only for Dependabot and fork pull requests.' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload main build artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-build-${{ github.sha }}
+          path: |
+            .next
+            public
+            package.json
+            next.config.ts
+          retention-days: 7

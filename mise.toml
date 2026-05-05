@@ -41,9 +41,14 @@ run = "npm run lint"
 [tasks.typecheck]
 alias = "t"
 description = "Run TypeScript type checks"
-run = "npm run test:build"
+run = "npm run typecheck"
 
 [tasks.test]
 alias = "te"
 description = "Run tests"
 run = "npm run test"
+
+[tasks.test-ci]
+alias = "tec"
+description = "Run tests (CI)"
+run = "npm run test:ci"
