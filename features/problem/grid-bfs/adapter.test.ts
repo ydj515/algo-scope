@@ -1,5 +1,4 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, test } from "vitest";
 import { gridBfsAdapter, type GridBfsInput } from "./adapter";
 
 function makeInput(overrides: Partial<GridBfsInput> = {}): GridBfsInput {
@@ -30,10 +29,10 @@ test("parseInputText parses valid json", () => {
     }),
   );
 
-  assert.equal(parsed.ok, true);
+  expect(parsed.ok).toBe(true);
   if (parsed.ok) {
-    assert.equal(parsed.value.rows, "3");
-    assert.equal(parsed.value.walls, "1,1");
+    expect(parsed.value.rows).toBe("3");
+    expect(parsed.value.walls).toBe("1,1");
   }
 });
 
@@ -49,14 +48,14 @@ test("normalizeFormInput auto-fills rows/cols/walls/goal from map", () => {
     }),
   );
 
-  assert.ok(normalized);
+  expect(normalized).toBeTruthy();
   if (normalized) {
-    assert.equal(normalized.rows, "3");
-    assert.equal(normalized.cols, "3");
-    assert.equal(normalized.goalRow, "2");
-    assert.equal(normalized.goalCol, "2");
-    assert.ok(normalized.walls.includes("0,1"));
-    assert.ok(normalized.walls.includes("2,0"));
+    expect(normalized.rows).toBe("3");
+    expect(normalized.cols).toBe("3");
+    expect(normalized.goalRow).toBe("2");
+    expect(normalized.goalCol).toBe("2");
+    expect(normalized.walls.includes("0,1")).toBeTruthy();
+    expect(normalized.walls.includes("2,0")).toBeTruthy();
   }
 });
 
@@ -64,11 +63,11 @@ test("run finds path on reachable grid", () => {
   const result = gridBfsAdapter.run(makeInput());
   const last = result.steps[result.steps.length - 1];
 
-  assert.equal(last.phase, "exit");
-  assert.equal(last.isError, false);
-  assert.ok(result.finalSnapshot.path.length > 0);
-  assert.equal(result.finalSnapshot.path[0].row, 0);
-  assert.equal(result.finalSnapshot.path[0].col, 0);
+  expect(last.phase).toBe("exit");
+  expect(last.isError).toBe(false);
+  expect(result.finalSnapshot.path.length > 0).toBeTruthy();
+  expect(result.finalSnapshot.path[0].row).toBe(0);
+  expect(result.finalSnapshot.path[0].col).toBe(0);
 });
 
 test("run returns failure when goal unreachable", () => {
@@ -83,9 +82,9 @@ test("run returns failure when goal unreachable", () => {
   );
 
   const last = result.steps[result.steps.length - 1];
-  assert.equal(last.phase, "exit");
-  assert.equal(last.isError, true);
-  assert.equal(result.finalSnapshot.path.length, 0);
+  expect(last.phase).toBe("exit");
+  expect(last.isError).toBe(true);
+  expect(result.finalSnapshot.path.length).toBe(0);
 });
 
 test("run infers rows/cols/walls from map text", () => {
@@ -102,12 +101,12 @@ test("run infers rows/cols/walls from map text", () => {
     }),
   );
 
-  assert.equal(result.finalSnapshot.rows, 4);
-  assert.equal(result.finalSnapshot.cols, 6);
-  assert.equal(result.finalSnapshot.goal.row, 3);
-  assert.equal(result.finalSnapshot.goal.col, 5);
-  assert.ok(result.finalSnapshot.walls.length > 0);
-  assert.equal(result.steps[result.steps.length - 1].phase, "exit");
+  expect(result.finalSnapshot.rows).toBe(4);
+  expect(result.finalSnapshot.cols).toBe(6);
+  expect(result.finalSnapshot.goal.row).toBe(3);
+  expect(result.finalSnapshot.goal.col).toBe(5);
+  expect(result.finalSnapshot.walls.length > 0).toBeTruthy();
+  expect(result.steps[result.steps.length - 1].phase).toBe("exit");
 });
 
 test("run supports matrix mode map", () => {
@@ -122,12 +121,12 @@ test("run supports matrix mode map", () => {
     }),
   );
 
-  assert.equal(result.finalSnapshot.rows, 5);
-  assert.equal(result.finalSnapshot.cols, 5);
-  assert.equal(result.finalSnapshot.goal.row, 4);
-  assert.equal(result.finalSnapshot.goal.col, 4);
-  assert.equal(result.finalSnapshot.walls.length, 0);
-  assert.equal(result.steps[result.steps.length - 1].phase, "exit");
+  expect(result.finalSnapshot.rows).toBe(5);
+  expect(result.finalSnapshot.cols).toBe(5);
+  expect(result.finalSnapshot.goal.row).toBe(4);
+  expect(result.finalSnapshot.goal.col).toBe(4);
+  expect(result.finalSnapshot.walls.length).toBe(0);
+  expect(result.steps[result.steps.length - 1].phase).toBe("exit");
 });
 
 test("run supports blockedValues expression and matrix number overlay", () => {
@@ -143,10 +142,10 @@ test("run supports blockedValues expression and matrix number overlay", () => {
     }),
   );
 
-  assert.equal(result.finalSnapshot.showCellValues, true);
-  assert.ok(result.finalSnapshot.matrixValues);
-  assert.equal(result.finalSnapshot.matrixValues?.[0][0], 1);
-  assert.equal(result.finalSnapshot.walls.length, 1);
+  expect(result.finalSnapshot.showCellValues).toBe(true);
+  expect(result.finalSnapshot.matrixValues).toBeTruthy();
+  expect(result.finalSnapshot.matrixValues?.[0][0]).toBe(1);
+  expect(result.finalSnapshot.walls.length).toBe(1);
 });
 
 test("matrix >5 rule keeps start/goal traversable", () => {
@@ -162,10 +161,10 @@ test("matrix >5 rule keeps start/goal traversable", () => {
     }),
   );
 
-  assert.equal(result.finalSnapshot.rows, 5);
-  assert.equal(result.finalSnapshot.cols, 5);
-  assert.equal(result.finalSnapshot.goal.row, 4);
-  assert.equal(result.finalSnapshot.goal.col, 4);
-  assert.equal(result.finalSnapshot.showCellValues, true);
-  assert.equal(result.steps[result.steps.length - 1].phase, "exit");
+  expect(result.finalSnapshot.rows).toBe(5);
+  expect(result.finalSnapshot.cols).toBe(5);
+  expect(result.finalSnapshot.goal.row).toBe(4);
+  expect(result.finalSnapshot.goal.col).toBe(4);
+  expect(result.finalSnapshot.showCellValues).toBe(true);
+  expect(result.steps[result.steps.length - 1].phase).toBe("exit");
 });

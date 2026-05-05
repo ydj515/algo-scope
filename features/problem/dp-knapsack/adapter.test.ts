@@ -1,5 +1,4 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, test } from "vitest";
 import { dpKnapsackAdapter } from "./adapter";
 
 test("knapsack adapter computes optimal value in 2d mode", () => {
@@ -12,9 +11,9 @@ test("knapsack adapter computes optimal value in 2d mode", () => {
     showPath: "true",
   });
 
-  assert.equal(result.finalSnapshot.answer, 12);
-  assert.ok(result.finalSnapshot.reconstructedPath.length > 0);
-  assert.equal(result.steps[result.steps.length - 1].phase, "exit");
+  expect(result.finalSnapshot.answer).toBe(12);
+  expect(result.finalSnapshot.reconstructedPath.length > 0).toBeTruthy();
+  expect(result.steps[result.steps.length - 1].phase).toBe("exit");
 });
 
 test("knapsack adapter computes optimal value in 1d mode", () => {
@@ -27,10 +26,10 @@ test("knapsack adapter computes optimal value in 1d mode", () => {
     showPath: "true",
   });
 
-  assert.equal(result.finalSnapshot.answer, 12);
-  assert.equal(result.finalSnapshot.rows, 1);
-  assert.equal(result.finalSnapshot.meta?.tableMode, "1d");
-  assert.ok(result.finalSnapshot.reconstructedPath.length > 0);
+  expect(result.finalSnapshot.answer).toBe(12);
+  expect(result.finalSnapshot.rows).toBe(1);
+  expect(result.finalSnapshot.meta?.tableMode).toBe("1d");
+  expect(result.finalSnapshot.reconstructedPath.length > 0).toBeTruthy();
 });
 
 test("knapsack adapter rejects mismatched lengths", () => {
@@ -43,5 +42,5 @@ test("knapsack adapter rejects mismatched lengths", () => {
     showPath: "false",
   });
 
-  assert.equal(result.steps[0].isError, true);
+  expect(result.steps[0].isError).toBe(true);
 });

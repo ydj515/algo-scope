@@ -33,4 +33,5 @@
 - 작업 시작 전 `TASK-XXX.md`를 만들고 `status: planned`로 시작합니다.
 - 구현 시작 시 `in_progress`로 변경합니다.
 - 완료 시 `status: done`, `completed_at`, `verification`을 채웁니다.
+- 작업을 성공으로 처리하려면 기본적으로 `npm run lint`, `npm run typecheck`, `npm run build`, `npm run test`가 모두 성공해야 합니다.
 - 작업 파일과 실제 코드 상태가 불일치하면 즉시 동기화합니다.

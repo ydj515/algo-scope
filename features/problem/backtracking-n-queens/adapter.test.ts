@@ -1,5 +1,4 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, test } from "vitest";
 import { backtrackingNQueensAdapter } from "./adapter";
 
 test("n-queens finds first solution with stopAfterFirst", () => {
@@ -11,9 +10,9 @@ test("n-queens finds first solution with stopAfterFirst", () => {
     maxSteps: "500",
   });
 
-  assert.equal(result.finalSnapshot.solutions.length, 1);
-  assert.equal(result.finalSnapshot.stoppedBy, "first_solution");
-  assert.equal(result.finalSnapshot.boardSize, 4);
+  expect(result.finalSnapshot.solutions.length).toBe(1);
+  expect(result.finalSnapshot.stoppedBy).toBe("first_solution");
+  expect(result.finalSnapshot.boardSize).toBe(4);
 });
 
 test("n-queens can continue search when stopAfterFirst is false", () => {
@@ -25,7 +24,7 @@ test("n-queens can continue search when stopAfterFirst is false", () => {
     maxSteps: "2000",
   });
 
-  assert.ok(result.finalSnapshot.solutions.length >= 2);
+  expect(result.finalSnapshot.solutions.length >= 2).toBeTruthy();
 });
 
 test("n-queens dedupeSymmetry removes symmetric duplicate solutions", () => {
@@ -44,6 +43,6 @@ test("n-queens dedupeSymmetry removes symmetric duplicate solutions", () => {
     maxSteps: "2000",
   });
 
-  assert.ok(withoutDedupe.finalSnapshot.solutions.length >= 2);
-  assert.equal(withDedupe.finalSnapshot.solutions.length, 1);
+  expect(withoutDedupe.finalSnapshot.solutions.length >= 2).toBeTruthy();
+  expect(withDedupe.finalSnapshot.solutions.length).toBe(1);
 });

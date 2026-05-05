@@ -1,5 +1,4 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, test } from "vitest";
 import { dpGridMinPathAdapter } from "./adapter";
 
 test("grid min path adapter computes answer", () => {
@@ -9,8 +8,8 @@ test("grid min path adapter computes answer", () => {
     showPath: "true",
   });
 
-  assert.equal(result.finalSnapshot.answer, 7);
-  assert.ok(result.finalSnapshot.reconstructedPath.length > 0);
+  expect(result.finalSnapshot.answer).toBe(7);
+  expect(result.finalSnapshot.reconstructedPath.length > 0).toBeTruthy();
 });
 
 test("grid min path adapter handles invalid grid", () => {
@@ -20,5 +19,5 @@ test("grid min path adapter handles invalid grid", () => {
     showPath: "false",
   });
 
-  assert.equal(result.steps[0].isError, true);
+  expect(result.steps[0].isError).toBe(true);
 });

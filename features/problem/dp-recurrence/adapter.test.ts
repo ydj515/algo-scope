@@ -1,5 +1,4 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, test } from "vitest";
 import { dpRecurrenceAdapter } from "./adapter";
 
 test("recurrence adapter runs with custom boundary conditions", () => {
@@ -15,9 +14,9 @@ test("recurrence adapter runs with custom boundary conditions", () => {
   });
 
   const last = result.steps[result.steps.length - 1];
-  assert.equal(last.phase, "exit");
-  assert.equal(result.finalSnapshot.answer, 5);
-  assert.ok(result.finalSnapshot.reconstructedPath.length > 0);
+  expect(last.phase).toBe("exit");
+  expect(result.finalSnapshot.answer).toBe(5);
+  expect(result.finalSnapshot.reconstructedPath.length > 0).toBeTruthy();
 });
 
 test("recurrence adapter parseInputText validates expression", () => {
@@ -34,5 +33,5 @@ test("recurrence adapter parseInputText validates expression", () => {
     }),
   );
 
-  assert.equal(parsed.ok, true);
+  expect(parsed.ok).toBe(true);
 });

@@ -2,6 +2,8 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-054 | 핵심 로직 테스트 보강 및 CI 고정 검증 파이프라인 추가 | in_progress | codex | 2026-05-06 |  | `docs/task/TASK-054.md` |
+| TASK-053 | 테스트 성공 기준 문서화 및 Vitest 전환 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-053.md` |
 | TASK-052 | TASK 파일 국문 작성 규칙 추가 및 기존 작업 파일 정정 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-052.md` |
 | TASK-051 | TODO 디자인 UI/UX 개선 반영 및 TODO 파일 삭제 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-051.md` |
 | TASK-050 | AGENTS.md 영어 번역 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-050.md` |

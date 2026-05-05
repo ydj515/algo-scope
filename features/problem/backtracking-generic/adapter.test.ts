@@ -1,5 +1,4 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, test } from "vitest";
 import { backtrackingGenericAdapter } from "./adapter";
 
 test("generic adapter stops at first solution when enabled", () => {
@@ -14,8 +13,8 @@ test("generic adapter stops at first solution when enabled", () => {
     maxSteps: "300",
   });
 
-  assert.equal(result.finalSnapshot.solutions.length, 1);
-  assert.equal(result.finalSnapshot.stoppedBy, "first_solution");
+  expect(result.finalSnapshot.solutions.length).toBe(1);
+  expect(result.finalSnapshot.stoppedBy).toBe("first_solution");
 });
 
 test("generic adapter respects maxSteps", () => {
@@ -30,7 +29,7 @@ test("generic adapter respects maxSteps", () => {
     maxSteps: "10",
   });
 
-  assert.equal(result.finalSnapshot.stoppedBy, "max_steps");
+  expect(result.finalSnapshot.stoppedBy).toBe("max_steps");
 });
 
 test("generic adapter supports depth-based candidateGenerator", () => {
@@ -46,5 +45,5 @@ test("generic adapter supports depth-based candidateGenerator", () => {
   });
 
   const serialized = result.finalSnapshot.solutions.map((solution) => solution.join(",")).sort();
-  assert.deepEqual(serialized, ["1,3", "2,3"]);
+  expect(serialized).toEqual(["1,3", "2,3"]);
 });

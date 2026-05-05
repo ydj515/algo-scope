@@ -1,35 +1,38 @@
-import assert from "node:assert/strict";
-import test from "node:test";
+import { expect, test } from "vitest";
 import { createEmptyStackState, peek, pop, push } from "./operations";
 import type { ListSnapshot } from "../../visualizer/types";
 
+function expectPresent<T>(value: T | null | undefined): asserts value is T {
+  expect(value).toBeTruthy();
+}
+
 function assertStackInvariant(state: ListSnapshot) {
-  assert.equal(state.size, Object.keys(state.nodes).length);
+  expect(state.size).toBe(Object.keys(state.nodes).length);
 
   if (state.size === 0) {
-    assert.equal(state.headId, null);
-    assert.equal(state.tailId, null);
-    assert.deepEqual(state.order, []);
+    expect(state.headId).toBe(null);
+    expect(state.tailId).toBe(null);
+    expect(state.order).toEqual([]);
     return;
   }
 
-  assert.ok(state.headId !== null);
-  assert.ok(state.tailId !== null);
-  assert.equal(state.order.length, state.size);
+  expect(state.headId !== null).toBeTruthy();
+  expect(state.tailId !== null).toBeTruthy();
+  expect(state.order.length).toBe(state.size);
 
   const visited = new Set<number>();
   let cursor: number | null = state.headId;
 
   for (let i = 0; i < state.size; i += 1) {
-    assert.ok(cursor !== null);
-    assert.ok(!visited.has(cursor));
+    expectPresent(cursor);
+    expect(!visited.has(cursor)).toBeTruthy();
     visited.add(cursor);
 
     const node: ListSnapshot["nodes"][number] | undefined = state.nodes[cursor];
-    assert.ok(node);
+    expectPresent(node);
 
     if (i === state.size - 1) {
-      assert.equal(node.id, state.tailId);
+      expect(node.id).toBe(state.tailId);
     }
 
     cursor = node.nextId === node.id ? null : node.nextId;
@@ -39,10 +42,10 @@ function assertStackInvariant(state: ListSnapshot) {
 test("push adds node on top", () => {
   const result = push(createEmptyStackState(), 10);
 
-  assert.equal(result.finalState.size, 1);
-  assert.ok(result.finalState.headId !== null);
+  expect(result.finalState.size).toBe(1);
+  expectPresent(result.finalState.headId);
   const top = result.finalState.nodes[result.finalState.headId];
-  assert.equal(top.value, 10);
+  expect(top.value).toBe(10);
   assertStackInvariant(result.finalState);
 });
 
@@ -53,9 +56,9 @@ test("pop removes top", () => {
 
   const result = pop(three);
 
-  assert.equal(result.finalState.size, 2);
-  assert.ok(result.finalState.headId !== null);
-  assert.equal(result.finalState.nodes[result.finalState.headId].value, 2);
+  expect(result.finalState.size).toBe(2);
+  expectPresent(result.finalState.headId);
+  expect(result.finalState.nodes[result.finalState.headId].value).toBe(2);
   assertStackInvariant(result.finalState);
 });
 
@@ -64,15 +67,15 @@ test("peek returns top without mutation", () => {
   const two = push(one, 9).finalState;
 
   const result = peek(two);
-  assert.equal(result.finalState.size, 2);
-  assert.equal(result.steps[0].title, "Peek");
-  assert.ok(result.steps[0].description.includes("9"));
+  expect(result.finalState.size).toBe(2);
+  expect(result.steps[0].title).toBe("Peek");
+  expect(result.steps[0].description.includes("9")).toBeTruthy();
   assertStackInvariant(result.finalState);
 });
 
 test("pop on empty returns error step", () => {
   const result = pop(createEmptyStackState());
-  assert.equal(result.steps.length, 1);
-  assert.equal(result.steps[0].isError, true);
-  assert.equal(result.finalState.size, 0);
+  expect(result.steps.length).toBe(1);
+  expect(result.steps[0].isError).toBe(true);
+  expect(result.finalState.size).toBe(0);
 });
