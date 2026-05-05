@@ -9,6 +9,12 @@ export default defineConfig({
   },
   test: {
     environment: "node",
-    include: ["features/**/*.test.ts"],
+    include: ["features/**/*.test.ts", "features/**/*.test.tsx"],
+    setupFiles: ["./vitest.setup.ts"],
+    coverage: {
+      provider: "v8",
+      reportsDirectory: "./coverage",
+      reporter: ["text", "html", "json-summary"],
+    },
   },
 });
