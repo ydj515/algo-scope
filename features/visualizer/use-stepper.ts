@@ -3,6 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Step } from "@/features/visualizer/types";
 
+/**
+ * 자료구조 시각화 step 목록의 현재 위치, 재생 상태, 탐색 제어를 관리하는 공용 훅입니다.
+ * VisualizerShell 계열 화면이 동일한 스테퍼 동작을 재사용할 수 있도록 상태와 제어 함수를 묶어 제공합니다.
+ */
 export function useStepper(initialSteps: Step[] = []) {
   const [steps, setSteps] = useState<Step[]>(initialSteps);
   const [currentIndex, setCurrentIndex] = useState(0);

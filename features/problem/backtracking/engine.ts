@@ -1,6 +1,10 @@
 import type { TraceStep } from "@/features/trace/types";
 import type { BacktrackingRuntimeOptions, BacktrackingSnapshot } from "@/features/problem/backtracking/types";
 
+/**
+ * 공통 백트래킹 엔진이 문제별 규칙을 주입받기 위해 사용하는 설정입니다.
+ * 후보 생성, 유효성 검사, 목표 판정, snapshot 후처리를 외부에서 주입할 수 있습니다.
+ */
 export type BacktrackingEngineConfig = {
   length: number;
   candidates: number[];
@@ -14,6 +18,9 @@ export type BacktrackingEngineConfig = {
   snapshotEnhancer?: (snapshot: BacktrackingSnapshot) => BacktrackingSnapshot;
 };
 
+/**
+ * 백트래킹 실행 결과로 생성된 step 목록과 최종 snapshot을 묶은 반환 타입입니다.
+ */
 export type BacktrackingRunResult = {
   steps: Array<TraceStep<BacktrackingSnapshot>>;
   finalSnapshot: BacktrackingSnapshot;
@@ -54,6 +61,10 @@ function makeStep(
   };
 }
 
+/**
+ * 문제별 설정과 런타임 옵션을 받아 백트래킹 탐색을 수행하고 시각화용 trace를 생성합니다.
+ * 상세 모드, 최대 step 수, 첫 해 발견 후 중단 같은 제어 흐름을 공통 엔진에서 일관되게 처리합니다.
+ */
 export function runBacktrackingEngine(
   config: BacktrackingEngineConfig,
   options: BacktrackingRuntimeOptions,

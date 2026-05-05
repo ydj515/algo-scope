@@ -2,6 +2,7 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
+| TASK-060 | lib 및 재사용 공개 API JSDoc 추가 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-060.md` |
 | TASK-059 | PR 커버리지 코멘트/Step Summary에 이전 실행 대비 증감 정보 단일 메트릭 표로 정리 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-059.md` |
 | TASK-058 | 자료구조 렌더러 테스트 확대 및 PR 커버리지 가시성 강화 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-058.md` |
 | TASK-057 | 잔여 렌더러 테스트 확대 및 CI 테스트 리포트/커버리지 아티팩트 추가 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-057.md` |

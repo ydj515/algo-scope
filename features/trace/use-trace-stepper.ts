@@ -3,6 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import type { TraceStep } from "@/features/trace/types";
 
+/**
+ * 문제 풀이 trace step 목록의 재생과 탐색 상태를 관리하는 공용 훅입니다.
+ * 제네릭 snapshot 타입을 받아 BFS/DFS/DP/백트래킹 등 다양한 trace 화면에서 공통으로 사용합니다.
+ */
 export function useTraceStepper<TSnapshot>(initialSteps: Array<TraceStep<TSnapshot>> = []) {
   const [steps, setSteps] = useState<Array<TraceStep<TSnapshot>>>(initialSteps);
   const [currentIndex, setCurrentIndex] = useState(0);
