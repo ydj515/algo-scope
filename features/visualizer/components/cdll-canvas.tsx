@@ -131,7 +131,7 @@ export function CdllCanvas({ snapshot }: Props) {
                 stroke={isHighlighted ? NODE_STROKE_HIGHLIGHT : NODE_STROKE_DEFAULT}
                 strokeWidth={isHighlighted ? NODE_STROKE_WIDTH_HIGHLIGHT : NODE_STROKE_WIDTH_DEFAULT}
               />
-              <text x={pos.x} y={pos.y + NODE_LABEL_OFFSET_Y} textAnchor="middle" className="fill-[var(--viz-cell-text)] text-xs font-semibold">
+              <text x={pos.x} y={pos.y + NODE_LABEL_OFFSET_Y} textAnchor="middle" className="fill-[var(--viz-cell-text)] font-mono text-xs font-semibold">
                 {node.value}
               </text>
 

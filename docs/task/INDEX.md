@@ -2,7 +2,9 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
-| TASK-050 | AGENTS.md English translation | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-050.md` |
+| TASK-052 | TASK 파일 국문 작성 규칙 추가 및 기존 작업 파일 정정 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-052.md` |
+| TASK-051 | TODO 디자인 UI/UX 개선 반영 및 TODO 파일 삭제 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-051.md` |
+| TASK-050 | AGENTS.md 영어 번역 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-050.md` |
 | TASK-049 | GlobalNav 상단 2개 탭(Data Structures/Problem Solving) hover 인터랙션 통일 | done | codex | 2026-02-19 | 2026-02-19 | `docs/task/TASK-049.md` |
 | TASK-048 | 테마 토글 버튼 hover 상호작용 강화(cursor/시각 피드백) | done | codex | 2026-02-19 | 2026-02-19 | `docs/task/TASK-048.md` |
 | TASK-047 | 테마 토글을 Sun/Moon 아이콘 버튼으로 단순화(system 제거) | in_progress | codex | 2026-02-19 |  | `docs/task/TASK-047.md` |

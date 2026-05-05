@@ -30,7 +30,7 @@ const sizeClass: Record<Size, string> = {
 };
 
 const solidToneClass: Record<Tone, string> = {
-  primary: "bg-[var(--color-primary)] text-[var(--color-primary-contrast)] hover:bg-[var(--color-primary-hover)]",
+  primary: "btn-primary-solid text-[var(--color-primary-contrast)]",
   neutral: "bg-[var(--color-fg)] text-[var(--color-surface)] hover:bg-[color-mix(in_srgb,var(--color-fg)_85%,black)]",
   success: "bg-[var(--color-success)] text-[var(--color-success-contrast)] hover:bg-[var(--color-success-hover)]",
   warning: "bg-[var(--color-warning)] text-[var(--color-warning-contrast)] hover:bg-[var(--color-warning-hover)]",
@@ -77,7 +77,7 @@ function resolveVariantToneClass(variant: Variant, tone: Tone): string {
 function baseClass(variant: Variant, tone: Tone, size: Size, className?: string): string {
   return cn(
     "inline-flex items-center justify-center rounded-[var(--radius-md)] font-semibold",
-    "transition-colors duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)]",
+    "transition-[background-color,border-color,color,box-shadow,filter] duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)]",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)]",
     "motion-pulse-focus",
     sizeClass[size],

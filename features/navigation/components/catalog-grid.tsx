@@ -9,8 +9,14 @@ type Props = {
 export function CatalogGrid({ items }: Props) {
   return (
     <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-      {items.map((item) => (
-        <Card key={item.id} className="p-5 motion-fade-in">
+      {items.map((item, index) => (
+        <Card
+          key={item.id}
+          className="p-5"
+          data-delay={String((index % 6) + 1)}
+          hoverable
+          motion="slide"
+        >
           <h2 className="text-lg font-semibold">{item.title}</h2>
           <p className="mt-2 text-sm text-[var(--color-fg-muted)]">{item.description}</p>
           <div className="mt-4">

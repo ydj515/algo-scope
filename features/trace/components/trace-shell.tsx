@@ -321,25 +321,25 @@ export function TraceShell<TInput extends Record<string, string>, TSnapshot>({
         <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           <Card className="p-4">
             <p className="text-xs text-[var(--color-fg-muted)]">Current Step</p>
-            <p className="mt-1 text-lg font-semibold">
+            <p className="mt-1 font-mono text-lg font-semibold">
               {steps.length === 0 ? "-" : `${currentIndex + 1} / ${steps.length}`}
             </p>
           </Card>
           <Card className="p-4">
             <p className="text-xs text-[var(--color-fg-muted)]">Phase</p>
-            <p className="mt-1 text-lg font-semibold">{currentStep?.phase ?? "-"}</p>
+            <p className="mt-1 font-mono text-lg font-semibold">{currentStep?.phase ?? "-"}</p>
           </Card>
           <Card className="p-4">
             <p className="text-xs text-[var(--color-fg-muted)]">Time Complexity</p>
-            <p className="mt-1 text-lg font-semibold">{currentStep?.complexity.timeWorst ?? "-"}</p>
+            <p className="mt-1 font-mono text-lg font-semibold">{currentStep?.complexity.timeWorst ?? "-"}</p>
           </Card>
           <Card className="p-4">
             <p className="text-xs text-[var(--color-fg-muted)]">Space Complexity</p>
-            <p className="mt-1 text-lg font-semibold">{currentStep?.complexity.spaceWorst ?? "-"}</p>
+            <p className="mt-1 font-mono text-lg font-semibold">{currentStep?.complexity.spaceWorst ?? "-"}</p>
           </Card>
           <Card className="p-4">
             <p className="text-xs text-[var(--color-fg-muted)]">State</p>
-            <p className="mt-1 text-sm">
+            <p className="mt-1 font-mono text-sm">
               {Object.entries(summary)
                 .map(([key, value]) => `${key}=${String(value)}`)
                 .join(", ") || "-"}
@@ -379,7 +379,7 @@ export function TraceShell<TInput extends Record<string, string>, TSnapshot>({
             {visibleSteps.map((step, idx) => (
               <div
                 key={`step-row-${step.id}`}
-                className={`flex items-center gap-2 rounded-[var(--radius-md)] px-2 py-1 text-xs ${
+                className={`flex items-center gap-2 rounded-[var(--radius-md)] px-2 py-1 font-mono text-xs ${
                   idx === visibleSteps.length - 1 ? "bg-[var(--color-surface-muted)]" : ""
                 }`}
               >

@@ -66,8 +66,18 @@ export function DpTableCanvas({ snapshot }: Props) {
 
               return (
                 <g key={`dp-cell-${k}`}>
-                  <rect x={x} y={y} width={CELL} height={CELL} fill={fill} stroke="var(--viz-grid-stroke)" strokeWidth={1} />
-                  <text x={x + CELL / 2} y={y + CELL / 2 + 4} textAnchor="middle" className="fill-[var(--viz-cell-text)] text-[11px] font-semibold">
+                  <rect
+                    x={x}
+                    y={y}
+                    width={CELL}
+                    height={CELL}
+                    fill={fill}
+                    stroke="var(--viz-grid-stroke)"
+                    strokeWidth={1}
+                    className="viz-cell"
+                    data-state={k === focusKey ? "current" : changed.has(k) ? "changed" : path.has(k) && snapshot.showPath ? "path" : "empty"}
+                  />
+                  <text x={x + CELL / 2} y={y + CELL / 2 + 4} textAnchor="middle" className="fill-[var(--viz-cell-text)] font-mono text-[11px] font-semibold">
                     {snapshot.table[row][col]}
                   </text>
                 </g>

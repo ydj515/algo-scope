@@ -77,24 +77,50 @@ export function GridBfsCanvas({ snapshot }: Props) {
               const cellValue = snapshot.matrixValues?.[row]?.[col];
 
               let fill = "var(--viz-cell-empty)";
-              if (isWall) fill = "var(--viz-cell-wall)";
-              else if (inPath) fill = "var(--viz-cell-path)";
-              else if (isCurrent) fill = "var(--viz-cell-current)";
-              else if (isGoal) fill = "var(--viz-cell-goal)";
-              else if (isStart) fill = "var(--viz-cell-start)";
-              else if (inFrontier) fill = "var(--viz-cell-frontier)";
-              else if (isVisited) fill = "var(--viz-cell-visited)";
+              let state = "empty";
+              if (isWall) {
+                fill = "var(--viz-cell-wall)";
+                state = "wall";
+              } else if (inPath) {
+                fill = "var(--viz-cell-path)";
+                state = "path";
+              } else if (isCurrent) {
+                fill = "var(--viz-cell-current)";
+                state = "current";
+              } else if (isGoal) {
+                fill = "var(--viz-cell-goal)";
+                state = "goal";
+              } else if (isStart) {
+                fill = "var(--viz-cell-start)";
+                state = "start";
+              } else if (inFrontier) {
+                fill = "var(--viz-cell-frontier)";
+                state = "frontier";
+              } else if (isVisited) {
+                fill = "var(--viz-cell-visited)";
+                state = "visited";
+              }
 
               return (
                 <g key={`cell-${key}`}>
-                  <rect x={x} y={y} width={CELL_SIZE} height={CELL_SIZE} fill={fill} stroke="var(--viz-grid-stroke)" strokeWidth={1} />
+                  <rect
+                    x={x}
+                    y={y}
+                    width={CELL_SIZE}
+                    height={CELL_SIZE}
+                    fill={fill}
+                    stroke="var(--viz-grid-stroke)"
+                    strokeWidth={1}
+                    className="viz-cell"
+                    data-state={state}
+                  />
                   {snapshot.showCellValues && typeof cellValue === "number" && (
                     <text
                       x={x + CELL_SIZE / 2}
                       y={y + CELL_SIZE / 2 + 4}
                       textAnchor="middle"
                       fill={isWall ? "var(--viz-cell-text-inverse)" : "var(--viz-cell-text)"}
-                      className="text-[10px]"
+                      className="font-mono text-[10px]"
                     >
                       {cellValue}
                     </text>
@@ -105,7 +131,7 @@ export function GridBfsCanvas({ snapshot }: Props) {
                       y={y + 12}
                       textAnchor="middle"
                       fill="var(--viz-cell-text)"
-                      className="text-[10px] font-bold"
+                      className="font-mono text-[10px] font-bold"
                     >
                       {isStart ? "S" : "G"}
                     </text>

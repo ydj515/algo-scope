@@ -1,51 +1,75 @@
+import { dsCatalog } from "@/features/navigation/catalog-ds";
+import { problemCatalog } from "@/features/navigation/catalog-problems";
 import { Button } from "@/features/ui/components/button";
 import { Card } from "@/features/ui/components/card";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-[var(--color-bg)] px-4 py-10 text-[var(--color-fg)] sm:px-8 motion-fade-in">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
-        <Card className="p-8 motion-slide-up" elevated>
-          <p className="text-sm font-medium text-[var(--color-primary)]">Algo Scope</p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight">자료구조/알고리즘 시각화 학습 도구</h1>
-          <p className="mt-3 max-w-2xl text-sm text-[var(--color-fg-muted)]">
-            학습 목적에 맞게 영역을 나눠 탐색하세요. 자료구조는 연산 중심, 문제풀이는 전략 중심 trace를 제공합니다.
-          </p>
-        </Card>
-
-        <section className="grid gap-4 md:grid-cols-2">
-          <Card className="p-6 motion-slide-up">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-fg-muted)]">Hub</p>
-            <h2 className="mt-2 text-2xl font-semibold">Data Structures</h2>
-            <p className="mt-2 text-sm text-[var(--color-fg-muted)]">
-              Stack, Queue, Tree, CDLL 같은 기본 자료구조 연산을 step-by-step으로 학습합니다.
-            </p>
-            <div className="mt-5">
-              <Button
-                href="/ds"
-                variant="solid"
-                className="bg-[var(--color-fg)] text-[var(--color-surface)] hover:bg-[color-mix(in_srgb,var(--color-fg)_85%,black)]"
-              >
-                DS 허브로 이동
+      <div className="mx-auto w-full max-w-6xl">
+        <section className="grid auto-rows-[minmax(150px,auto)] grid-cols-1 gap-4 md:grid-cols-4 md:auto-rows-[178px]">
+          <Card className="flex flex-col justify-between p-7 md:col-span-2 md:row-span-2 md:p-8" data-delay="1" elevated motion="slide">
+            <div>
+              <p className="font-mono text-xs font-semibold uppercase text-[var(--color-primary)]">Algo Scope</p>
+              <h1 className="mt-3 max-w-xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl">
+                자료구조와 알고리즘 흐름을 한 단계씩 추적합니다
+              </h1>
+              <p className="mt-4 max-w-2xl text-sm leading-6 text-[var(--color-fg-muted)]">
+                연산, 방문 순서, DP 테이블, 백트래킹 분기를 같은 인터랙션 패턴으로 관찰하며 학습 목적에 맞게 빠르게 이동하세요.
+              </p>
+            </div>
+            <div className="mt-7 flex flex-wrap gap-2">
+              <Button href="/ds" variant="solid">
+                자료구조 보기
+              </Button>
+              <Button href="/problems" variant="outline" tone="neutral">
+                문제풀이 보기
               </Button>
             </div>
           </Card>
 
-          <Card className="p-6 motion-slide-up">
-            <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-fg-muted)]">Hub</p>
-            <h2 className="mt-2 text-2xl font-semibold">Problem Solving</h2>
-            <p className="mt-2 text-sm text-[var(--color-fg-muted)]">
-              BFS/DFS, DP, Backtracking 문제 풀이 과정을 trace로 확인하고 가설을 검증합니다.
-            </p>
-            <div className="mt-5">
-              <Button
-                href="/problems"
-                variant="solid"
-                className="bg-[var(--color-fg)] text-[var(--color-surface)] hover:bg-[color-mix(in_srgb,var(--color-fg)_85%,black)]"
-              >
-                Problems 허브로 이동
-              </Button>
+          <Card className="flex flex-col justify-between p-5" data-delay="2" hoverable motion="slide">
+            <div>
+              <p className="font-mono text-xs font-semibold uppercase text-[var(--color-fg-muted)]">DS</p>
+              <h2 className="mt-2 text-xl font-semibold">Data Structures</h2>
+              <p className="mt-2 text-sm leading-6 text-[var(--color-fg-muted)]">
+                Stack, Queue, Tree, CDLL 연산을 step-by-step으로 학습합니다.
+              </p>
             </div>
+            <Button href="/ds" variant="subtle" className="mt-5 self-start">
+              DS 허브
+            </Button>
+          </Card>
+
+          <Card className="flex flex-col justify-between p-5" data-delay="3" hoverable motion="slide">
+            <div>
+              <p className="font-mono text-xs font-semibold uppercase text-[var(--color-fg-muted)]">Trace</p>
+              <h2 className="mt-2 text-xl font-semibold">Problem Solving</h2>
+              <p className="mt-2 text-sm leading-6 text-[var(--color-fg-muted)]">
+                BFS/DFS, DP, Backtracking 풀이 과정을 trace로 검증합니다.
+              </p>
+            </div>
+            <Button href="/problems" variant="subtle" className="mt-5 self-start">
+              Problems 허브
+            </Button>
+          </Card>
+
+          <Card className="grid grid-cols-2 gap-4 p-5 md:col-span-2" data-delay="4" elevated motion="slide">
+            <div>
+              <p className="font-mono text-3xl font-bold text-[var(--color-primary)]">{dsCatalog.length}</p>
+              <p className="mt-1 text-sm text-[var(--color-fg-muted)]">자료구조 시각화</p>
+            </div>
+            <div>
+              <p className="font-mono text-3xl font-bold text-[var(--color-success)]">{problemCatalog.length}</p>
+              <p className="mt-1 text-sm text-[var(--color-fg-muted)]">문제풀이 trace</p>
+            </div>
+          </Card>
+
+          <Card className="flex flex-col justify-between p-5 md:col-span-2" data-delay="5" hoverable motion="slide">
+            <p className="font-mono text-xs font-semibold uppercase text-[var(--color-fg-muted)]">Workflow</p>
+            <p className="mt-2 text-sm leading-6 text-[var(--color-fg-muted)]">
+              입력을 바꾸고 Execute를 누른 뒤, Step List와 Canvas를 오가며 시간·공간 복잡도와 상태 변화를 함께 확인합니다.
+            </p>
           </Card>
         </section>
       </div>

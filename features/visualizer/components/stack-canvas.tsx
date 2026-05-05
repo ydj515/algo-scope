@@ -50,7 +50,7 @@ export function StackCanvas({ snapshot }: Props) {
                 stroke={isHighlighted ? "var(--viz-node-highlight-stroke)" : "var(--viz-node-stroke)"}
                 strokeWidth={isHighlighted ? 3 : 2}
               />
-              <text x={x + BOX_WIDTH / 2} y={y + BOX_HEIGHT / 2 + 4} textAnchor="middle" className="fill-[var(--viz-cell-text)] text-sm font-semibold">
+              <text x={x + BOX_WIDTH / 2} y={y + BOX_HEIGHT / 2 + 4} textAnchor="middle" className="fill-[var(--viz-cell-text)] font-mono text-sm font-semibold">
                 {node.value}
               </text>
 

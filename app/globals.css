@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
 :root {
+  --font-sans: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
   --color-bg: #f5f6f8;
   --color-surface: #ffffff;
   --color-surface-muted: #f2f4f7;
@@ -71,6 +74,8 @@
   --radius-lg: 1rem;
 
   --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.1);
+  --shadow-hover: 0 14px 34px rgba(15, 23, 42, 0.14);
 
   --motion-duration-fast: 180ms;
   --motion-duration-normal: 280ms;
@@ -146,10 +151,14 @@
     --viz-nq-cell-dark: #334155;
     --viz-nq-queen: #fb7185;
     --shadow-sm: 0 4px 14px rgba(2, 8, 23, 0.35);
+    --shadow-md: 0 8px 24px rgba(2, 8, 23, 0.45);
+    --shadow-hover: 0 14px 34px rgba(2, 8, 23, 0.6);
   }
 }
 
 :root[data-theme="light"] {
+  --font-sans: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --color-bg: #f5f6f8;
   --color-surface: #ffffff;
   --color-surface-muted: #f2f4f7;
@@ -214,9 +223,13 @@
   --viz-nq-cell-dark: #cbd5e1;
   --viz-nq-queen: #be123c;
   --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.1);
+  --shadow-hover: 0 14px 34px rgba(15, 23, 42, 0.14);
 }
 
 :root[data-theme="dark"] {
+  --font-sans: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --color-bg: #0b1220;
   --color-surface: #131c2b;
   --color-surface-muted: #1a2435;
@@ -281,11 +294,15 @@
   --viz-nq-cell-dark: #334155;
   --viz-nq-queen: #fb7185;
   --shadow-sm: 0 4px 14px rgba(2, 8, 23, 0.35);
+  --shadow-md: 0 8px 24px rgba(2, 8, 23, 0.45);
+  --shadow-hover: 0 14px 34px rgba(2, 8, 23, 0.6);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --font-sans: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 @keyframes subtle-fade-in {
@@ -329,16 +346,77 @@
   animation: subtle-pulse-focus 700ms var(--motion-ease-standard) 1;
 }
 
+.motion-fade-in[data-delay="1"],
+.motion-slide-up[data-delay="1"] {
+  animation-delay: 60ms;
+}
+
+.motion-fade-in[data-delay="2"],
+.motion-slide-up[data-delay="2"] {
+  animation-delay: 120ms;
+}
+
+.motion-fade-in[data-delay="3"],
+.motion-slide-up[data-delay="3"] {
+  animation-delay: 180ms;
+}
+
+.motion-fade-in[data-delay="4"],
+.motion-slide-up[data-delay="4"] {
+  animation-delay: 240ms;
+}
+
+.motion-fade-in[data-delay="5"],
+.motion-slide-up[data-delay="5"] {
+  animation-delay: 300ms;
+}
+
+.motion-fade-in[data-delay="6"],
+.motion-slide-up[data-delay="6"] {
+  animation-delay: 360ms;
+}
+
+.viz-cell {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    fill 150ms ease,
+    stroke 150ms ease,
+    transform 100ms ease;
+}
+
+.viz-cell[data-state="current"] {
+  transform: scale(1.05);
+}
+
+.btn-primary-solid {
+  background: linear-gradient(135deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 78%, #6366f1));
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-primary) 40%, transparent);
+}
+
+.btn-primary-solid:hover {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 20%, transparent);
+  filter: brightness(1.03);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .motion-fade-in,
   .motion-slide-up,
   .motion-pulse-focus:focus-visible {
     animation: none;
   }
+
+  .viz-cell {
+    transition: none;
+  }
+
+  .viz-cell[data-state="current"] {
+    transform: none;
+  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  font-family: var(--font-sans);
 }

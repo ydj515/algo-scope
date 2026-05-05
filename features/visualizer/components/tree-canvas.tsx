@@ -118,7 +118,7 @@ export function TreeCanvas({ snapshot }: Props) {
                 stroke={isHighlighted ? "var(--viz-node-highlight-stroke)" : "var(--viz-node-stroke)"}
                 strokeWidth={isHighlighted ? 3 : 2}
               />
-              <text x={item.x} y={item.y + 4} textAnchor="middle" className="fill-[var(--viz-cell-text)] text-xs font-semibold">
+              <text x={item.x} y={item.y + 4} textAnchor="middle" className="fill-[var(--viz-cell-text)] font-mono text-xs font-semibold">
                 {node.value}
               </text>
               {isRoot ? (
