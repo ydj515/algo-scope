@@ -207,7 +207,7 @@ jobs:
           retention-days: 7
 
       - name: Update PR coverage comment
-        if: always() && github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' && github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/github-script@v8
         with:
           script: |
@@ -242,6 +242,11 @@ jobs:
               issue_number,
               body,
             })
+
+      - name: Note skipped PR coverage comment
+        if: always() && github.event_name == 'pull_request' && (github.actor == 'dependabot[bot]' || github.event.pull_request.head.repo.full_name != github.repository)
+        run: |
+          echo 'Skipping PR coverage comment because GITHUB_TOKEN is read-only for Dependabot and fork pull requests.' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload main build artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'

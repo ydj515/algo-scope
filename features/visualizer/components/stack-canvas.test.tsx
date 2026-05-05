@@ -9,8 +9,8 @@ function createSnapshot(overrides: Partial<ListSnapshot> = {}): ListSnapshot {
   return {
     nodes: {
       1: { id: 1, value: 30, prevId: 1, nextId: 2 },
-      2: { id: 2, value: 20, prevId: 2, nextId: 3 },
-      3: { id: 3, value: 10, prevId: 3, nextId: 3 },
+      2: { id: 2, value: 20, prevId: 1, nextId: 3 },
+      3: { id: 3, value: 10, prevId: 2, nextId: 3 },
     },
     order: [1, 2, 3],
     headId: 1,
