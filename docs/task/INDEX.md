@@ -2,7 +2,12 @@
 
 | id | title | status | owner | created_at | completed_at | path |
 |---|---|---|---|---|---|---|
-| TASK-054 | 핵심 로직 테스트 보강 및 CI 고정 검증 파이프라인 추가 | in_progress | codex | 2026-05-06 |  | `docs/task/TASK-054.md` |
+| TASK-059 | PR 커버리지 코멘트/Step Summary에 이전 실행 대비 증감 정보 단일 메트릭 표로 정리 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-059.md` |
+| TASK-058 | 자료구조 렌더러 테스트 확대 및 PR 커버리지 가시성 강화 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-058.md` |
+| TASK-057 | 잔여 렌더러 테스트 확대 및 CI 테스트 리포트/커버리지 아티팩트 추가 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-057.md` |
+| TASK-056 | 공통 렌더러 테스트 확대 및 CI/README 고도화 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-056.md` |
+| TASK-055 | CI 식별자 정리 및 공통 UI 레이어 컴포넌트 테스트 확장 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-055.md` |
+| TASK-054 | 핵심 로직 테스트 보강 및 CI 고정 검증 파이프라인 추가 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-054.md` |
 | TASK-053 | 테스트 성공 기준 문서화 및 Vitest 전환 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-053.md` |
 | TASK-052 | TASK 파일 국문 작성 규칙 추가 및 기존 작업 파일 정정 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-052.md` |
 | TASK-051 | TODO 디자인 UI/UX 개선 반영 및 TODO 파일 삭제 | done | codex | 2026-05-06 | 2026-05-06 | `docs/task/TASK-051.md` |

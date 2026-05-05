@@ -1,5 +1,7 @@
 # Algo Scope
 
+[![Required Checks](https://github.com/ydj515/algo-scope/actions/workflows/ci.yml/badge.svg)](https://github.com/ydj515/algo-scope/actions/workflows/ci.yml)
+
 알고리즘 문제 풀이 학습을 위한 자료구조/알고리즘 시각화 프로젝트입니다.  
 사용자 입력 기반 연산을 실행하고, 내부 상태 변화를 Step 단위로 재생하는 것을 목표로 합니다.
 
@@ -29,6 +31,9 @@
 - React + TypeScript
 - Tailwind CSS v4
 - ESLint (`eslint-config-next`)
+- Vitest
+- Testing Library (`@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`)
+- jsdom
 
 ## 프로젝트 구조
 
@@ -60,9 +65,38 @@ npm run dev
 ```bash
 npm run dev     # 개발 서버
 npm run lint    # 정적 분석
+npm run typecheck # 타입 검사
 npm run build   # 프로덕션 빌드
+npm run test    # Vitest 테스트
 npm run start   # 프로덕션 실행
 ```
+
+## 테스트 가이드
+
+기본 성공 기준은 아래 4가지 명령이 모두 통과하는 것입니다.
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
+npm run test
+```
+
+현재 테스트 범위는 아래 축을 포함합니다.
+
+- 순수 로직 단위 테스트: 자료구조 연산, DP/그래프/백트래킹 어댑터, 공통 백트래킹 엔진
+- 공통 UI 셸 테스트: `TraceShell`, `VisualizerShell`
+- 공통 렌더러 테스트: `GridBfsCanvas`, `DpTableCanvas`, `BacktrackingCanvas`
+
+컴포넌트 테스트는 `Vitest + Testing Library + jsdom` 조합으로 실행되며, 시각 상태는 텍스트, `data-state`, SVG 노드 구조를 기준으로 검증합니다.
+
+## CI
+
+GitHub Actions 워크플로 `Required Checks`는 브랜치 보호 규칙에 연결할 수 있는 고정 체크 `required-checks`를 제공합니다.
+
+- `push`, `pull_request`에서 `lint`, `typecheck`, `build`, `test`를 실행
+- npm 의존성 캐시와 Next.js 빌드 캐시를 사용
+- `main` 브랜치 푸시 시 `.next` 기반 빌드 아티팩트를 업로드
 
 ## 개발 규칙 요약
 
