@@ -28,24 +28,21 @@ export function GlobalNav() {
         : null;
 
   return (
-    <header className="border-b border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-surface)_88%,transparent)] backdrop-blur motion-fade-in">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-3 sm:px-8">
+    <header className="global-header motion-fade-in">
+      <div className="page-container flex flex-col gap-2 px-4 py-3 sm:px-8">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-sm font-bold text-[var(--color-fg)]">
+          <Link href="/" className="ty-label1 font-bold">
             Algo Scope
           </Link>
           <div className="flex items-center gap-2">
-            <nav className="relative grid grid-cols-2 rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-1 shadow-[var(--shadow-sm)]">
+            <nav className="nav-segmented">
               {mainTabs.map((tab) => (
                 <Link
                   key={tab.href}
                   href={tab.href}
                   className={cn(
-                    "relative z-10 whitespace-nowrap rounded-[var(--radius-md)] px-2.5 py-1.5 text-center text-xs font-semibold",
-                    "transition-[background-color,color,box-shadow] duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)] sm:px-3 sm:text-sm",
-                    tab.active
-                      ? "bg-[var(--color-surface-muted)] text-[var(--color-fg)] shadow-[var(--shadow-sm)]"
-                      : "text-[var(--color-fg-muted)] hover:bg-[color-mix(in_srgb,var(--color-primary)_8%,var(--color-surface))] hover:text-[var(--color-primary)]",
+                    "nav-tab",
+                    tab.active ? "nav-tab--active" : "nav-tab--inactive",
                   )}
                 >
                   {tab.label}

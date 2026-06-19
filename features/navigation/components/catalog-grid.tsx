@@ -17,8 +17,8 @@ export function CatalogGrid({ items }: Props) {
           hoverable
           motion="slide"
         >
-          <h2 className="text-lg font-semibold">{item.title}</h2>
-          <p className="mt-2 text-sm text-[var(--color-fg-muted)]">{item.description}</p>
+          <h2 className="ty-headline1">{item.title}</h2>
+          <p className="mt-2 ty-label1 text-muted">{item.description}</p>
           <div className="mt-4">
             <Button
               href={item.href}

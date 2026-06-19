@@ -1,0 +1,26 @@
+/* ──────────────────────────────────────────────────────────────
+   프로젝트 폰트 — self-hosted variable font (OFL 라이선스)
+   ────────────────────────────────────────────────────────────── */
+
+/* ── 본문 서체 (산세리프 가변 폰트) ──────────────────────────── */
+@font-face {
+  font-family: "Pretendard Variable";
+  src: url("/fonts/PretendardVariable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* ── 폰트 토큰 ──────────────────────────────────────────────── */
+:root {
+  /* 서체 패밀리 */
+  --font-sans: "Pretendard Variable",
+    "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code",
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* 서체 굵기 (가변 폰트 기반) */
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+}

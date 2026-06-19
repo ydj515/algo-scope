@@ -10,16 +10,13 @@ type FieldWrapProps = {
 
 function FieldWrap({ label, helperText, className, children }: FieldWrapProps) {
   return (
-    <div className={cn("flex flex-col gap-1 text-sm", className)}>
-      {label ? <span className="font-medium text-[var(--color-fg)]">{label}</span> : null}
+    <div className={cn("field-wrap", className)}>
+      {label ? <span className="field-label">{label}</span> : null}
       {children}
-      {helperText ? <span className="text-xs text-[var(--color-fg-muted)]">{helperText}</span> : null}
+      {helperText ? <span className="field-helper">{helperText}</span> : null}
     </div>
   );
 }
-
-const CONTROL_CLASS =
-  "rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm";
 
 type InputFieldProps = Omit<InputHTMLAttributes<HTMLInputElement>, "children"> & {
   label?: string;
@@ -36,7 +33,7 @@ export function InputField({
 }: InputFieldProps) {
   return (
     <FieldWrap label={label} helperText={helperText} className={wrapperClassName}>
-      <input className={cn(CONTROL_CLASS, className)} {...props} />
+      <input className={cn("field-control", className)} {...props} />
     </FieldWrap>
   );
 }
@@ -69,7 +66,7 @@ export function SelectField({
 }: SelectFieldProps) {
   return (
     <FieldWrap label={label} helperText={helperText} className={wrapperClassName}>
-      <select className={cn(CONTROL_CLASS, className)} {...props}>
+      <select className={cn("field-control", className)} {...props}>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -95,7 +92,7 @@ export function TextareaField({
 }: TextareaFieldProps) {
   return (
     <FieldWrap label={label} helperText={helperText} className={wrapperClassName}>
-      <textarea className={cn(CONTROL_CLASS, className)} {...props} />
+      <textarea className={cn("field-control", className)} {...props} />
     </FieldWrap>
   );
 }
@@ -139,10 +136,10 @@ export function CheckboxField({
 }: CheckboxFieldProps) {
   return (
     <FieldWrap helperText={helperText} className={wrapperClassName}>
-      <label className="inline-flex items-center gap-2 text-sm text-[var(--color-fg)]">
+      <label className="inline-flex items-center gap-2 ty-label1">
         <input
           type="checkbox"
-          className={cn("h-4 w-4 rounded border-[var(--color-border)] accent-[var(--color-primary)]", className)}
+          className={cn("h-4 w-4 rounded accent-[var(--color-primary)]", className)}
           {...props}
         />
         <span>{label}</span>

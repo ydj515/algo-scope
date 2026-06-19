@@ -36,7 +36,7 @@ export function ThemeToggle() {
         aria-label={`테마 전환 (현재: ${isDark ? "dark" : "light"}, 다음: ${nextMode})`}
         title={`Switch to ${nextMode}`}
         onClick={() => setMode(nextMode)}
-        className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-fg)] transition-all duration-200 hover:border-[var(--color-primary)] hover:bg-[var(--color-surface-muted)] hover:text-[var(--color-primary)] motion-pulse-focus"
+        className="theme-toggle-btn motion-pulse-focus"
       >
         <svg viewBox="0 0 20 20" className="h-4 w-4" fill="none" aria-hidden="true">
           {isDark ? (

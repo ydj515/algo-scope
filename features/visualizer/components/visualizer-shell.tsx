@@ -114,10 +114,10 @@ export function VisualizerShell<
   const visibleSteps = steps.slice(Math.max(0, currentIndex - 4), currentIndex + 1);
 
   return (
-    <div className="min-h-screen bg-[var(--color-bg)] px-4 py-8 text-[var(--color-fg)] sm:px-8 motion-fade-in">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-4">
+    <div className="page-main motion-fade-in">
+      <div className="page-container flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold">{adapter.title}</h1>
+          <h1 className="ty-heading2">{adapter.title}</h1>
           <Button href={homeHref} variant="outline" size="sm" tone="neutral">
             홈으로
           </Button>
@@ -125,7 +125,7 @@ export function VisualizerShell<
 
         {adapter.description ? (
           <Card className="p-4">
-            <p className="text-sm text-[var(--color-fg-muted)]">{adapter.description}</p>
+            <p className="ty-label1 text-muted">{adapter.description}</p>
           </Card>
         ) : null}
 
@@ -171,22 +171,22 @@ export function VisualizerShell<
 
         <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Card className="p-4">
-            <p className="text-xs text-[var(--color-fg-muted)]">Current Step</p>
-            <p className="mt-1 font-mono text-lg font-semibold">
+            <p className="text-caption">Current Step</p>
+            <p className="mt-1 font-mono ty-headline1">
               {steps.length === 0 ? "-" : `${currentIndex + 1} / ${steps.length}`}
             </p>
           </Card>
           <Card className="p-4">
-            <p className="text-xs text-[var(--color-fg-muted)]">Time Complexity</p>
-            <p className="mt-1 font-mono text-lg font-semibold">{currentStep?.complexity.timeWorst ?? "-"}</p>
+            <p className="text-caption">Time Complexity</p>
+            <p className="mt-1 font-mono ty-headline1">{currentStep?.complexity.timeWorst ?? "-"}</p>
           </Card>
           <Card className="p-4">
-            <p className="text-xs text-[var(--color-fg-muted)]">Space Complexity</p>
-            <p className="mt-1 font-mono text-lg font-semibold">{currentStep?.complexity.spaceWorst ?? "-"}</p>
+            <p className="text-caption">Space Complexity</p>
+            <p className="mt-1 font-mono ty-headline1">{currentStep?.complexity.spaceWorst ?? "-"}</p>
           </Card>
           <Card className="p-4">
-            <p className="text-xs text-[var(--color-fg-muted)]">State</p>
-            <p className="mt-1 font-mono text-sm">
+            <p className="text-caption">State</p>
+            <p className="mt-1 font-mono ty-label1">
               {Object.entries(stateSummary)
                 .map(([key, value]) => `${key}=${String(value)}`)
                 .join(", ")}
@@ -219,37 +219,37 @@ export function VisualizerShell<
 
         <Card className="p-4">
           <div className="mb-2 flex items-center gap-2">
-            <p className="text-sm font-semibold">Step List</p>
+            <p className="ty-label1 font-semibold">Step List</p>
             <Badge tone="neutral" variant="outline">{steps.length} steps</Badge>
           </div>
           <div className="space-y-1">
             {visibleSteps.map((step, idx) => (
               <div
                 key={`step-row-${step.id}`}
-                className={`flex items-center gap-2 rounded-[var(--radius-md)] px-2 py-1 font-mono text-xs ${
+                className={`flex items-center gap-2 rounded-[var(--radius-md)] px-2 py-1 font-mono ty-caption1 ${
                   idx === visibleSteps.length - 1
                     ? "bg-[var(--color-surface-muted)]"
                     : ""
                 }`}
               >
                 <Badge tone={step.isError ? "danger" : "info"}>{step.isError ? "ERROR" : "STEP"}</Badge>
-                <span className="truncate text-[var(--color-fg-muted)]">
+                <span className="truncate text-muted">
                   {step.title}
                 </span>
               </div>
             ))}
-            {steps.length === 0 ? <p className="text-xs text-[var(--color-fg-muted)]">아직 step이 없습니다.</p> : null}
+            {steps.length === 0 ? <p className="ty-caption1 text-muted">아직 step이 없습니다.</p> : null}
           </div>
         </Card>
 
         <Card className="p-4">
           <div className="flex items-center gap-2">
-            <p className="text-sm font-semibold">Step Description</p>
+            <p className="ty-label1 font-semibold">Step Description</p>
             <Badge tone={currentStep?.isError ? "danger" : "info"}>
               {currentStep?.isError ? "ERROR" : "INFO"}
             </Badge>
           </div>
-          <p className={`mt-2 text-sm ${currentStep?.isError ? "text-[var(--color-danger)]" : "text-[var(--color-fg-muted)]"}`}>
+          <p className={`mt-2 ty-label1 ${currentStep?.isError ? "text-[var(--color-danger)]" : "text-muted"}`}>
             {currentStep
               ? `${currentStep.title}: ${currentStep.description}`
               : "연산을 실행하면 단계 설명이 표시됩니다."}

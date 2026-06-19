@@ -18,10 +18,9 @@ export function Card({
   return (
     <section
       className={cn(
-        "rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)]",
-        "transition-[border-color,box-shadow,transform] duration-[var(--motion-duration-fast)] ease-[var(--motion-ease-standard)]",
-        elevated ? "shadow-[var(--shadow-md)]" : "",
-        hoverable ? "hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--color-primary)_32%,var(--color-border))] hover:shadow-[var(--shadow-hover)]" : "",
+        "card-base",
+        elevated ? "card-elevated" : "",
+        hoverable ? "card-hoverable" : "",
         motion === "fade" ? "motion-fade-in" : "",
         motion === "slide" ? "motion-slide-up" : "",
         className,

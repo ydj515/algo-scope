@@ -32,28 +32,18 @@ export function CanvasFrame({
 }: Props) {
   if (!hasData) {
     return (
-      <div
-        className={cn(
-          "flex h-[380px] items-center justify-center rounded-[var(--radius-lg)] border border-dashed border-[var(--color-border)] bg-[var(--color-surface-muted)] text-sm text-[var(--color-fg-muted)]",
-          className,
-        )}
-      >
+      <div className={cn("canvas-empty", className)}>
         {emptyText}
       </div>
     );
   }
 
   return (
-    <section
-      className={cn(
-        "rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-4",
-        className,
-      )}
-    >
+    <section className={cn("canvas-filled", className)}>
       {header ? <div className="mb-3">{header}</div> : null}
       {children}
       {legend ? <div className="mt-3">{legend}</div> : null}
-      {message ? <p className="mt-2 text-sm text-[var(--color-fg-muted)]">{message}</p> : null}
+      {message ? <p className="mt-2 text-muted ty-label1">{message}</p> : null}
     </section>
   );
 }
