@@ -1,0 +1,23 @@
+version: 1
+
+base: true
+
+languages:
+  - typescript
+
+architectures:
+  - route-feature
+
+frameworks:
+  - react-ts
+  - next-ts
+  - tailwind
+
+tools:
+  - eslint
+  - frameworks/react-ts/eslint-plugin-react-hooks
+  - frameworks/next-ts/eslint-config-next
+  - frameworks/react-ts/vitest
+
+runtimes:
+  - mise

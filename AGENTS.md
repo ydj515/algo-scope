@@ -5,7 +5,7 @@ This document is a summary hub. For detailed rules, refer to `docs/agent/*.md`.
 ## Mandatory Rules
 - Create `docs/task/TASK-XXX.md` before starting any task.
 - Whenever a task file is created or its status changes, update `docs/task/INDEX.md` in the same commit.
-- Codex execution policies are managed in `.codex/rules/*.rules`.
+- Shared development standards are configured in `.dev-standards/config.yml` and synchronized via `.github/workflows/sync-dev-standards.yml`.
 - Do not use repository-local absolute paths such as `/Users/...` in `docs/*.md` or `docs/task/*.md`; use relative paths only.
 
 ## Detailed Policy Documents

@@ -1,6 +1,13 @@
 # Algo Scope
 
-[![Required Checks](https://github.com/ydj515/algo-scope/actions/workflows/ci.yml/badge.svg)](https://github.com/ydj515/algo-scope/actions/workflows/ci.yml)
+[![Required Checks](https://github.com/ydj515/algo-scope/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ydj515/algo-scope/actions/workflows/ci.yml)
+[![Sync Development Standards](https://github.com/ydj515/algo-scope/actions/workflows/sync-dev-standards.yml/badge.svg)](https://github.com/ydj515/algo-scope/actions/workflows/sync-dev-standards.yml)
+![Node.js](https://img.shields.io/badge/Node.js-24.22-339933?logo=nodedotjs&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16.4-000000?logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-19.3-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.3-06B6D4?logo=tailwindcss&logoColor=white)
+![Vitest](https://img.shields.io/badge/Vitest-4.1-6E9F18?logo=vitest&logoColor=white)
 
 알고리즘 문제 풀이 학습을 위한 자료구조/알고리즘 시각화 프로젝트입니다.  
 사용자 입력 기반 연산을 실행하고, 내부 상태 변화를 Step 단위로 재생하는 것을 목표로 합니다.
@@ -42,7 +49,7 @@
 - `app`: 라우팅 및 UI 진입점
 - `public`: 정적 리소스
 - `docs`: 기획/정책/작업 로그 문서
-- `.codex/rules`: Codex 실행 정책
+- `.dev-standards`: 공통 개발 표준 설정
 
 예정 구조(구현 진행 시 확장):
 
